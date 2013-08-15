@@ -12,7 +12,7 @@ module.exports = function(grunt) {
 	var path = require('path');
 	var datauri = require('datauri');
 
-	grunt.registerMultiTask('inline', "Properly prepends a CDN url to those assets referenced with absolute paths (but not URLs)", function() {
+	grunt.registerMultiTask('inline', "将标记为inline的<script>、<link>、<img>等资源进行内嵌", function() {
 		// grunt.log.writeln( typeof this.options('copy') );
 		// grunt.log.writeln( JSON.stringify(this.options('copy')) );
 		grunt.log.subhead('inline任务开始！！\n');
