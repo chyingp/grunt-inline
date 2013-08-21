@@ -15,8 +15,10 @@ module.exports = function(grunt) {
 	grunt.registerMultiTask('inline', "将标记为inline的<script>、<link>、<img>等资源进行内嵌", function() {
 		// grunt.log.writeln( typeof this.options('copy') );
 		// grunt.log.writeln( JSON.stringify(this.options('copy')) );
+
 		grunt.log.subhead('inline任务开始！！\n');
-		var files = this.filesSrc;
+		var files = this.filesSrc,
+		    relativeTo = (this.options('inline') || {}).relativeTo;
 
 		files.forEach(function(filepath){
 			var fileType = path.extname(filepath).replace(/^\./, '');
@@ -25,7 +27,7 @@ module.exports = function(grunt) {
 			grunt.log.writeln('inline > 处理文件开始：'+ filepath);
 			
 			if(fileType==='html'){
-				fileContent = html(filepath, fileContent);
+				fileContent = html(filepath, fileContent, relativeTo);
 			}else if(fileType==='css'){
 				//fileContent = html(filepath, fileContent);
 			}
@@ -37,7 +39,11 @@ module.exports = function(grunt) {
 
 	});
 
-	function html(filepath, fileContent){
+	function html(filepath, fileContent, relativeTo){
+
+        if(relativeTo){
+            filepath = filepath.replace(/[^\/]+\//, relativeTo);
+        }
 
 		return fileContent.replace(/<script.+src=["']([^"']+)["'].*><\/script>/g, function(matchedWord, src){
 			var ret = matchedWord;
