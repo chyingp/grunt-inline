@@ -18,7 +18,7 @@ module.exports = function(grunt) {
 
 		grunt.log.subhead('inline任务开始！！\n');
 		var files = this.filesSrc,
-		    relativeTo = (this.options('inline') || {}).relativeTo;
+		    relativeTo = this.options().relativeTo;
 
 		files.forEach(function(filepath){
 			var fileType = path.extname(filepath).replace(/^\./, '');
