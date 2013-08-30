@@ -64,7 +64,7 @@ module.exports = function(grunt) {
 			
 			return ret;
 
-		}).replace(/<link.+href=["']([^"']+)["'].*\/>/g, function(matchedWord, src){
+		}).replace(/<link.+href=["']([^"']+)["'].*\/?>/g, function(matchedWord, src){
 			var ret = matchedWord;
 			
 			if(!grunt.file.isPathAbsolute(src) && src.indexOf('__inline')!=-1){
