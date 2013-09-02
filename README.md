@@ -109,4 +109,4 @@ grunt.initConfig({
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
-_(Nothing yet)_
+* 2013-08-30  v0.1.6 bug fix: stylesheets ended with ">" cannot be inlined
