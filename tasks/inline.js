@@ -61,7 +61,24 @@ module.exports = function(grunt) {
             filepath = filepath.replace(/[^\/]+\//, relativeTo);
         }
 
-		return fileContent.replace(/<script.+src=["']([^"']+)["'].*><\/script>/g, function(matchedWord, src){
+		return fileContent.replace(/<inline.+src=["']([^"']+)["']\s*\/>/, function(matchedWord, src){
+			var ret = matchedWord;
+
+			if(!grunt.file.isPathAbsolute(src)){
+
+				var inlineFilePath = path.resolve( path.dirname(filepath), src );
+				grunt.log.writeln('inline >inline file，src = ' + src + ', 实际路径：'+inlineFilePath);
+
+				if( grunt.file.exists(inlineFilePath) ){
+					ret = grunt.file.read( inlineFilePath );
+				}else{
+					grunt.log.error('inline > '+inlineFilePath + ' 不存在！');
+				}
+			}
+			grunt.log.debug('ret = : ' + ret +'\n');
+
+			return ret;
+		}).replace(/<script.+src=["']([^"']+)["'].*><\/script>/g, function(matchedWord, src){
 			var ret = matchedWord;
 			
 			if(!grunt.file.isPathAbsolute(src) && src.indexOf('__inline')!=-1){
@@ -73,7 +90,6 @@ module.exports = function(grunt) {
 					ret = '<script>\n' +grunt.file.read( inlineFilePath ) + '\n</script>';
 				}else{
 					grunt.log.error('inline > '+inlineFilePath + ' 不存在！');
-					// ret = matchedWord;
 				}
 			}					
 			grunt.log.debug('ret = : ' + ret +'\n');

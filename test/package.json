@@ -10,6 +10,6 @@
   },
   "devDependencies": {
 	"grunt": "~0.4.1",
-    "grunt-inline": "~0.1.7"
+    "grunt-inline": "~0.1.8"
   }
 }

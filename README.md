@@ -60,7 +60,8 @@ grunt.initConfig({
 	grunt.initConfig({
 	  inline: {
 	    dist: {
-	      src: [ 'dist/index.html' ]
+	      src: [ 'dist/index.html' ],
+	      dest: [ 'dev/' ]
 	    }
 	  }
 	})
@@ -105,9 +106,32 @@ grunt.initConfig({
 		</body>
 	</html>
 
+#### inline tag
+Suppose there is an `<inline>` tag in `index.html` like bellow
+
+```
+<!-- inline tag -->
+<inline src="test.html" />
+```
+
+The content of `test.html` is
+
+```
+<p>I'm inline html</p>
+<span>hello world!</span>
+```
+
+Then, after the `inline` task is run, the original content in `index.html` will be replaced with
+
+```
+<p>I'm inline html</p>
+<span>hello world!</span>
+```
+
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
 * 2013-08-30  v0.1.6 bug fix: stylesheets ended with ">" cannot be inlined
-* 2013-09-02  v0.1.6 add feature: add options.dest to assign a destination path where the source file will be copied
+* 2013-09-02  v0.1.7 add feature: add options.dest to assign a destination path where the source file will be copied
+* 2013-09-02  v0.1.8 add feature: support for <inline> tag
