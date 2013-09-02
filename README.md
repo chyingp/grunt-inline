@@ -36,6 +36,22 @@ In your project's Gruntfile, add a section named `inline` to the data object pas
 	    },
 	  },
 	})
+### Options
+
+#### dest
+If dest is assigned, the the source file will be copied to the destination path. eg:
+`dist/index.html` will be processed and then copied to `dest/index.html`
+
+```
+grunt.initConfig({
+	inline: {
+		dist: {
+			src: ['dist/index.html'],
+			dest: ['dest/']
+		}
+	}
+});
+```
 
 ### Usage Examples
 

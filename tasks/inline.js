@@ -18,7 +18,8 @@ module.exports = function(grunt) {
 
 		grunt.log.subhead('inline任务开始！！\n');
 		var files = this.filesSrc,
-		    relativeTo = this.options().relativeTo;
+		    relativeTo = this.options().relativeTo,
+			dest = this.data.dest;
 
 		files.forEach(function(filepath){
 			var fileType = path.extname(filepath).replace(/^\./, '');
@@ -31,13 +32,28 @@ module.exports = function(grunt) {
 			}else if(fileType==='css'){
 				//fileContent = html(filepath, fileContent);
 			}
-			
-			grunt.file.write(filepath,fileContent);
-			grunt.log.subhead('inline > 处理文件结束：'+ filepath);	
+
+			var destFile = getPathToDestination(filepath, dest);
+			grunt.log.writeln('inline > 目标路径：'+ destFile);
+			grunt.file.write(destFile,fileContent);
+			grunt.log.subhead('inline > 处理文件结束：'+ filepath);
 		});
 		grunt.log.subhead('inline任务结束！！');
 
 	});
+
+	// from grunt-text-replace.js in grunt-text-replace
+	function getPathToDestination(pathToSource, pathToDestinationFile) {
+		var isDestinationDirectory = (/\/$/).test(pathToDestinationFile);
+		var fileName = path.basename(pathToSource);
+		var newPathToDestination;
+		if (typeof pathToDestinationFile === 'undefined') {
+			newPathToDestination = pathToSource;
+		} else {
+			newPathToDestination = pathToDestinationFile + (isDestinationDirectory ? fileName : '');
+		}
+		return newPathToDestination;
+	}
 
 	function html(filepath, fileContent, relativeTo){
 

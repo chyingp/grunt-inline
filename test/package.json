@@ -1,6 +1,6 @@
 {
   "name": "grunt-inline",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "repository": {
     "type": "git",
     "url": "https://github.com/chyingp/grunt-inline.git"
@@ -10,6 +10,6 @@
   },
   "devDependencies": {
 	"grunt": "~0.4.1",
-    "grunt-inline": "~0.1.5"
+    "grunt-inline": "~0.1.7"
   }
 }

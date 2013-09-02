@@ -5,7 +5,8 @@ module.exports = function(grunt) {
 
 		inline: {
 			dist: {
-				src: ['dist/index.html']
+				src: ['dist/index.html'],
+				dest: ['dev/']
 			}
 		}
 
