@@ -134,4 +134,4 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 ## Release History
 * 2013-08-30  v0.1.6 bug fix: stylesheets ended with ">" cannot be inlined
 * 2013-09-02  v0.1.7 add feature: add options.dest to assign a destination path where the source file will be copied
-* 2013-09-02  v0.1.8 add feature: support for <inline> tag
+* 2013-09-02  v0.1.8 add feature: support for `<inline>` tag
