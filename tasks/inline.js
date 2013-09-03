@@ -58,7 +58,7 @@ module.exports = function(grunt) {
 	function html(filepath, fileContent, relativeTo){
 
         if(relativeTo){
-            filepath = filepath.replace(/[^\/]+\//, relativeTo);
+            filepath = filepath.replace(/[^\/]+\//g, relativeTo);
         }
 
 		return fileContent.replace(/<inline.+src=["']([^"']+)["']\s*\/>/, function(matchedWord, src){
