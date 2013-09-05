@@ -61,7 +61,7 @@ module.exports = function(grunt) {
             filepath = filepath.replace(/[^\/]+\//, relativeTo);
         }
 
-		return fileContent.replace(/<inline.+src=["']([^"']+)["']\s*\/>/, function(matchedWord, src){
+		return fileContent.replace(/<inline.+src=["']([^"']+)["']\s*\/>/g, function(matchedWord, src){
 			var ret = matchedWord;
 
 			if(!grunt.file.isPathAbsolute(src)){
