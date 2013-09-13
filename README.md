@@ -1,4 +1,4 @@
-# grunt-inline
+# grunt-inline[![build status](https://secure.travis-ci.org/miniflycn/grunt-inline.png)](http://travis-ci.org/miniflycn/grunt-inline)
 
 > 将html页面里的外链资源，比如js、css、img，变成内联资源。比如：
 
