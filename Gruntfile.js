@@ -4,7 +4,7 @@ module.exports = function(grunt) {
 	grunt.initConfig({
 		inline: {
 			dist: {
-				src: ['test/dist/css.html', 'test/dist/img.html', 'test/dist/html.html'],
+				src: ['test/dist/*.html'],
 				dest: ['tmp/']
 			}
 		},
@@ -22,7 +22,12 @@ module.exports = function(grunt) {
 				files: {
 					'tmp/css.min.html': 'tmp/css.html',
 					'tmp/img.min.html': 'tmp/img.html',
-					'tmp/html.min.html': 'tmp/html.html'
+					'tmp/html.min.html': 'tmp/html.html',
+					'tmp/script.min.html': 'tmp/script.html',
+					'tmp/css_greedy.min.html': 'tmp/css_greedy.html',
+					'tmp/img_greedy.min.html': 'tmp/img_greedy.html',
+					'tmp/html_greedy.min.html': 'tmp/html_greedy.html',
+					'tmp/script_greedy.min.html': 'tmp/script_greedy.html'
 				}
 			}
 		},
