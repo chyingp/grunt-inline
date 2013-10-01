@@ -126,7 +126,7 @@ module.exports = function(grunt) {
 							console.log( 'imgUrlRelativeToParentFile: '+imgUrlRelativeToParentFile);
 						}
 						// console.log('imgUrlRelativeToParentFile: '+imgUrlRelativeToParentFile);
-						return imgUrlRelativeToParentFile;
+						return matchedWord.replace(imgUrl, imgUrlRelativeToParentFile);
 					});
 
 					ret = '<style>\n' +styleSheetContent + '\n</style>';
