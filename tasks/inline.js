@@ -42,6 +42,10 @@ module.exports = function(grunt) {
 
 	});
 
+	function isRemotePath( url ){
+		return url.match(/^https?:\/\//);
+	}
+
 	// from grunt-text-replace.js in grunt-text-replace
 	function getPathToDestination(pathToSource, pathToDestinationFile) {
 		var isDestinationDirectory = (/\/$/).test(pathToDestinationFile);
@@ -106,7 +110,27 @@ module.exports = function(grunt) {
 				grunt.log.writeln('inline > inline stylesheet，href = ' + src, ', 实际路径： ' + inlineFilePath);
 
 				if( grunt.file.exists(inlineFilePath) ){
-					ret = '<style>\n' +grunt.file.read( inlineFilePath ) + '\n</style>';
+					var styleSheetContent = grunt.file.read( inlineFilePath );
+					
+					styleSheetContent = styleSheetContent.replace(/url\(([^)]+)\)/g, function(matchedWord, imgUrl){
+						var imgUrlRelativeToParentFile = matchedWord;
+						if(isRemotePath(imgUrl)){
+							// return matchedWord;
+						}else{
+							console.log( 'filepath: '+ filepath);
+							console.log( 'imgUrl: '+imgUrl);
+							console.log( 'inlineFilePath: '+inlineFilePath);
+							var absoluteImgurl = path.resolve( path.dirname(inlineFilePath),imgUrl );
+							console.log( 'absoluteImgurl: '+absoluteImgurl);
+							imgUrlRelativeToParentFile = path.relative( path.dirname(filepath), absoluteImgurl );
+							console.log( 'imgUrlRelativeToParentFile: '+imgUrlRelativeToParentFile);
+						}
+						// console.log('imgUrlRelativeToParentFile: '+imgUrlRelativeToParentFile);
+						return imgUrlRelativeToParentFile;
+					});
+
+					ret = '<style>\n' +styleSheetContent + '\n</style>';
+
 				}else{
 					grunt.log.error('inline > '+inlineFilePath + ' 不存在！');
 				}
