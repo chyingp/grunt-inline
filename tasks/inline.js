@@ -1,6 +1,6 @@
 /*
- * grunt-inline
- * https://github.com/chyingp/grunt-inline
+ * casper-inline
+ * https://github.com/tactivos/casper-inline
  *
  * Copyright (c) 2013 Auguest G. casper & IMWEB TEAM
  */
@@ -65,7 +65,7 @@ module.exports = function(grunt) {
             filepath = filepath.replace(/[^\/]+\//g, relativeTo);
         }
 
-		return fileContent.replace(/<inline.+src=["']([^"']+)["']\s*\/>/g, function(matchedWord, src){
+		return fileContent.replace(/<inline.+?src=["']([^"']+?)["']\s*?\/>/g, function(matchedWord, src){
 			var ret = matchedWord;
 
 			if(!grunt.file.isPathAbsolute(src)){
@@ -82,7 +82,7 @@ module.exports = function(grunt) {
 			grunt.log.debug('ret = : ' + ret +'\n');
 
 			return ret;
-		}).replace(/<script.+src=["']([^"']+)["'].*><\/script>/g, function(matchedWord, src){
+		}).replace(/<script.+?src=["']([^"']+?)["'].*?><\/script>/g, function(matchedWord, src){
 			var ret = matchedWord;
 			
 			if(!grunt.file.isPathAbsolute(src) && src.indexOf('__inline')!=-1){
@@ -100,7 +100,7 @@ module.exports = function(grunt) {
 			
 			return ret;
 
-		}).replace(/<link.+href=["']([^"']+)["'].*\/?>/g, function(matchedWord, src){
+		}).replace(/<link.+?href=["']([^"']+?)["'].*?\/?>/g, function(matchedWord, src){
 			var ret = matchedWord;
 			
 			if(!grunt.file.isPathAbsolute(src) && src.indexOf('__inline')!=-1){
@@ -138,7 +138,7 @@ module.exports = function(grunt) {
 			grunt.log.debug('ret = : ' + ret +'\n');
 			
 			return ret;	
-		}).replace(/<img.+src=["']([^"']+)["'].*\/?\s*>/g, function(matchedWord, src){
+		}).replace(/<img.+?src=["']([^"']+?)["'].*?\/?\s*?>/g, function(matchedWord, src){
 			var	ret = matchedWord;
 			
 			if(!grunt.file.isPathAbsolute(src) && src.indexOf('__inline')!=-1){
