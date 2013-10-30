@@ -135,7 +135,7 @@ module.exports = function(grunt) {
 							console.log( 'imgUrlRelativeToParentFile: '+imgUrlRelativeToParentFile);
 						}
 						// console.log('imgUrlRelativeToParentFile: '+imgUrlRelativeToParentFile);
-						return matchedWord.replace(imgUrl, imgUrlRelativeToParentFile);
+						return matchedWord.replace(imgUrl, imgUrlRelativeToParentFile.replace(/\\/g, '/'));
 					});
 					styleSheetContent = options.cssmin ? CleanCSS.process(styleSheetContent) : styleSheetContent;
 					ret = '<style>\n' + styleSheetContent + '\n</style>';
