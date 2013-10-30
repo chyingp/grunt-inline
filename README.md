@@ -33,8 +33,8 @@ In your project's Gruntfile, add a section named `inline` to the data object pas
 	  inline: {
 	    dist: {
 	      src: [ 'dist/index.html' ]
-	    },
-	  },
+	    }
+	  }
 	})
 ### Options
 
@@ -53,6 +53,39 @@ grunt.initConfig({
 });
 ```
 
+### cssmin
+If cssmin is assigned true, `.css` will be minified before inlined.
+
+```
+grunt.initConfig({
+	inline: {
+		dist: {
+			options:{
+				cssmin: true
+			},
+			src: ['dist/index.html'],
+			dest: ['dest/']
+		}
+	}
+});
+```
+
+### uglify
+If uglify is assigned true, `.js` file will be minified before inlined.
+
+```
+grunt.initConfig({
+	inline: {
+		dist: {
+			options:{
+				uglify: true
+			},
+			src: ['dist/index.html'],
+			dest: ['dest/']
+		}
+	}
+});
+```
 ### Usage Examples
 
 > config
@@ -132,6 +165,8 @@ Then, after the `inline` task is run, the original content in `index.html` will 
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
+* 2013-10-30  v0.1.6 bug fix: when processing relative file path of img url in css stylesheet, forgot to transform "\" to "/" for windows users
+* 2013-10-30  v0.1.6 new feature: Support for minifing js、css when they ar inlined into html. 
 * 2013-08-30  v0.1.6 bug fix: stylesheets ended with ">" cannot be inlined
 * 2013-09-02  v0.1.7 add feature: add options.dest to assign a destination path where the source file will be copied
 * 2013-09-02  v0.1.8 add feature: support for `<inline>` tag
