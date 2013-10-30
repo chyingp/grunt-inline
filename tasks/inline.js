@@ -11,6 +11,8 @@ module.exports = function(grunt) {
 	
 	var path = require('path');
 	var datauri = require('datauri');
+	var UglifyJS = require("uglify-js");
+	var CleanCSS = require('clean-css');
 
 	grunt.registerMultiTask('inline', "将标记为inline的<script>、<link>、<img>等资源进行内嵌", function() {
 		// grunt.log.writeln( typeof this.options('copy') );
@@ -18,7 +20,10 @@ module.exports = function(grunt) {
 
 		grunt.log.subhead('inline任务开始！！\n');
 		var files = this.filesSrc,
-		    relativeTo = this.options().relativeTo,
+			options = this.options(),
+			uglify = !!options.uglify,
+			cssmin = !!options.cssmin,
+		    	relativeTo = this.options().relativeTo,
 			dest = this.data.dest;
 
 		files.forEach(function(filepath){
@@ -28,7 +33,10 @@ module.exports = function(grunt) {
 			grunt.log.writeln('inline > 处理文件开始：'+ filepath);
 			
 			if(fileType==='html'){
-				fileContent = html(filepath, fileContent, relativeTo);
+				fileContent = html(filepath, fileContent, relativeTo, {
+					uglify: uglify,
+					cssmin: cssmin
+				});
 			}else if(fileType==='css'){
 				//fileContent = html(filepath, fileContent);
 			}
@@ -59,13 +67,13 @@ module.exports = function(grunt) {
 		return newPathToDestination;
 	}
 
-	function html(filepath, fileContent, relativeTo){
+	function html(filepath, fileContent, relativeTo, options){
 
         if(relativeTo){
             filepath = filepath.replace(/[^\/]+\//g, relativeTo);
         }
 
-		return fileContent.replace(/<inline.+?src=["']([^"']+?)["']\s*?\/>/g, function(matchedWord, src){
+		fileContent = fileContent.replace(/<inline.+?src=["']([^"']+?)["']\s*?\/>/g, function(matchedWord, src){
 			var ret = matchedWord;
 
 			if(!grunt.file.isPathAbsolute(src)){
@@ -90,8 +98,9 @@ module.exports = function(grunt) {
 				var inlineFilePath = path.resolve( path.dirname(filepath), src ).replace(/\?.*$/, '');	// 将参数去掉
 				grunt.log.writeln('inline >inline script，src = ' + src + ', 实际路径：'+inlineFilePath);
 
+				var c = options.uglify ? UglifyJS.minify(inlineFilePath).code : grunt.file.read( inlineFilePath );
 				if( grunt.file.exists(inlineFilePath) ){
-					ret = '<script>\n' +grunt.file.read( inlineFilePath ) + '\n</script>';
+					ret = '<script>\n' + c + '\n</script>';
 				}else{
 					grunt.log.error('inline > '+inlineFilePath + ' 不存在！');
 				}
@@ -128,8 +137,8 @@ module.exports = function(grunt) {
 						// console.log('imgUrlRelativeToParentFile: '+imgUrlRelativeToParentFile);
 						return matchedWord.replace(imgUrl, imgUrlRelativeToParentFile);
 					});
-
-					ret = '<style>\n' +styleSheetContent + '\n</style>';
+					styleSheetContent = options.cssmin ? CleanCSS.process(styleSheetContent) : styleSheetContent;
+					ret = '<style>\n' + styleSheetContent + '\n</style>';
 
 				}else{
 					grunt.log.error('inline > '+inlineFilePath + ' 不存在！');
@@ -157,5 +166,7 @@ module.exports = function(grunt) {
 			
 			return ret;	
 		});
+
+		return fileContent;
 	}
 };
