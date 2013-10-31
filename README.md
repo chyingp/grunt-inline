@@ -165,8 +165,9 @@ Then, after the `inline` task is run, the original content in `index.html` will 
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
-* 2013-10-30  v0.1.6 bug fix: when processing relative file path of img url in css stylesheet, forgot to transform "\" to "/" for windows users
-* 2013-10-30  v0.1.6 new feature: Support for minifing js、css when they ar inlined into html. 
-* 2013-08-30  v0.1.6 bug fix: stylesheets ended with ">" cannot be inlined
-* 2013-09-02  v0.1.7 add feature: add options.dest to assign a destination path where the source file will be copied
+* 2013-10-31  v0.2.2 bug fix: img urls like 'background: url(http://www.example.com/img/bg.png)' will be transformed to 'background: url(url(http://www.example.com/img/bg.png))'
+* 2013-10-30  v0.2.1 bug fix: when processing relative file path of img url in css stylesheet, forgot to transform "\" to "/" for windows users
+* 2013-10-30  v0.2.0 new feature: Support for minifing js、css when they ar inlined into html. 
+* 2013-08-30  v0.1.9 bug fix: stylesheets ended with ">" cannot be inlined
+* 2013-09-02  v0.1.9 add feature: add options.dest to assign a destination path where the source file will be copied
 * 2013-09-02  v0.1.8 add feature: support for `<inline>` tag

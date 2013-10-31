@@ -76,7 +76,7 @@ module.exports = function(grunt) {
 		fileContent = fileContent.replace(/<inline.+?src=["']([^"']+?)["']\s*?\/>/g, function(matchedWord, src){
 			var ret = matchedWord;
 
-			if(!grunt.file.isPathAbsolute(src)){
+			if(isRemotePath(src) && !grunt.file.isPathAbsolute(src)){
 
 				var inlineFilePath = path.resolve( path.dirname(filepath), src );
 				grunt.log.writeln('inline >inline file，src = ' + src + ', 实际路径：'+inlineFilePath);
@@ -93,7 +93,7 @@ module.exports = function(grunt) {
 		}).replace(/<script.+?src=["']([^"']+?)["'].*?><\/script>/g, function(matchedWord, src){
 			var ret = matchedWord;
 			
-			if(!grunt.file.isPathAbsolute(src) && src.indexOf('__inline')!=-1){
+			if(!isRemotePath(src) && src.indexOf('__inline')!=-1){
 
 				var inlineFilePath = path.resolve( path.dirname(filepath), src ).replace(/\?.*$/, '');	// 将参数去掉
 				grunt.log.writeln('inline >inline script，src = ' + src + ', 实际路径：'+inlineFilePath);
@@ -112,7 +112,7 @@ module.exports = function(grunt) {
 		}).replace(/<link.+?href=["']([^"']+?)["'].*?\/?>/g, function(matchedWord, src){
 			var ret = matchedWord;
 			
-			if(!grunt.file.isPathAbsolute(src) && src.indexOf('__inline')!=-1){
+			if(!isRemotePath(src) && src.indexOf('__inline')!=-1){
 
 				var inlineFilePath = path.resolve( path.dirname(filepath), src ).replace(/\?.*$/, '');	// 将参数去掉	
 
@@ -122,7 +122,7 @@ module.exports = function(grunt) {
 					var styleSheetContent = grunt.file.read( inlineFilePath );
 					
 					styleSheetContent = styleSheetContent.replace(/url\(([^)]+)\)/g, function(matchedWord, imgUrl){
-						var imgUrlRelativeToParentFile = matchedWord;
+						var imgUrlRelativeToParentFile = imgUrl;
 						if(isRemotePath(imgUrl)){
 							// return matchedWord;
 						}else{
@@ -135,7 +135,7 @@ module.exports = function(grunt) {
 							console.log( 'imgUrlRelativeToParentFile: '+imgUrlRelativeToParentFile);
 						}
 						// console.log('imgUrlRelativeToParentFile: '+imgUrlRelativeToParentFile);
-						return matchedWord.replace(imgUrl, imgUrlRelativeToParentFile.replace(/\\/g, '/'));
+						return matchedWord.replace(imgUrl, imgUrlRelativeToParentFile);
 					});
 					styleSheetContent = options.cssmin ? CleanCSS.process(styleSheetContent) : styleSheetContent;
 					ret = '<style>\n' + styleSheetContent + '\n</style>';
