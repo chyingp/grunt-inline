@@ -73,7 +73,7 @@ module.exports = function(grunt) {
 		fileContent = fileContent.replace(/<inline.+?src=["']([^"']+?)["']\s*?\/>/g, function(matchedWord, src){
 			var ret = matchedWord;
 
-			if(isRemotePath(src) && !grunt.file.isPathAbsolute(src)){
+			if(isRemotePath(src) || !grunt.file.isPathAbsolute(src)){
 
 				var inlineFilePath = path.resolve( path.dirname(filepath), src );
 				grunt.log.writeln('inline >inline file，src = ' + src + ', 实际路径：'+inlineFilePath);
