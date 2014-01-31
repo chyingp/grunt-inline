@@ -82,9 +82,8 @@ module.exports = function(grunt) {
 			return ret;
 		}).replace(/<script.+?src=["']([^"']+?)["'].*?><\/script>/g, function(matchedWord, src){
 			var ret = matchedWord;
-			grunt.log.writeln('tag: ', options.tag, 'src', src)
-			if(!isRemotePath(src) && src.indexOf(options.tag)!=-1){
 
+			if(!isRemotePath(src) && src.indexOf(options.tag)!=-1){
 				var inlineFilePath = path.resolve( path.dirname(filepath), src ).replace(/\?.*$/, '');	// 将参数去掉
 				var c = options.uglify ? UglifyJS.minify(inlineFilePath).code : grunt.file.read( inlineFilePath );
 				if( grunt.file.exists(inlineFilePath) ){
