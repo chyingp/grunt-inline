@@ -20,7 +20,7 @@ module.exports = function(grunt) {
 
 		grunt.log.subhead('inline任务开始！！\n');
 		var files = this.filesSrc,
-			options = this.options(),
+			options = this.options({tag: '__inline'}),
 			uglify = !!options.uglify,
 			cssmin = !!options.cssmin,
 		    	relativeTo = this.options().relativeTo,
@@ -33,10 +33,7 @@ module.exports = function(grunt) {
 			grunt.log.writeln('inline > 处理文件开始：'+ filepath);
 			
 			if(fileType==='html'){
-				fileContent = html(filepath, fileContent, relativeTo, {
-					uglify: uglify,
-					cssmin: cssmin
-				});
+				fileContent = html(filepath, fileContent, relativeTo, options);
 			}else if(fileType==='css'){
 				//fileContent = html(filepath, fileContent);
 			}
@@ -90,10 +87,10 @@ module.exports = function(grunt) {
 			grunt.log.debug('ret = : ' + ret +'\n');
 
 			return ret;
-		}).replace(/<script.+?src=["']([^"']+?)["'].*?><\/script>/g, function(matchedWord, src){
+		}).replace(/<script.+?src=["']([^"']+?)["'].*><\/script>/g, function(matchedWord, src){
 			var ret = matchedWord;
-			
-			if(!isRemotePath(src) && src.indexOf('__inline')!=-1){
+			grunt.log.writeln('tag: ', options.tag, 'src', src)
+			if(!isRemotePath(src) && src.indexOf(options.tag)!=-1){
 
 				var inlineFilePath = path.resolve( path.dirname(filepath), src ).replace(/\?.*$/, '');	// 将参数去掉
 				grunt.log.writeln('inline >inline script，src = ' + src + ', 实际路径：'+inlineFilePath);
@@ -112,7 +109,7 @@ module.exports = function(grunt) {
 		}).replace(/<link.+?href=["']([^"']+?)["'].*?\/?>/g, function(matchedWord, src){
 			var ret = matchedWord;
 			
-			if(!isRemotePath(src) && src.indexOf('__inline')!=-1){
+			if(!isRemotePath(src) && src.indexOf(options.tag)!=-1){
 
 				var inlineFilePath = path.resolve( path.dirname(filepath), src ).replace(/\?.*$/, '');	// 将参数去掉	
 
@@ -121,8 +118,8 @@ module.exports = function(grunt) {
 				if( grunt.file.exists(inlineFilePath) ){
 					var styleSheetContent = grunt.file.read( inlineFilePath );
 					
-					styleSheetContent = styleSheetContent.replace(/url\(([^)]+)\)/g, function(matchedWord, imgUrl){
-						var imgUrlRelativeToParentFile = imgUrl;
+					styleSheetContent = styleSheetContent.replace(/url\(["']*([^)'"]+)["']*\)/g, function(matchedWord, imgUrl){
+						var newUrl = imgUrl
 						if(isRemotePath(imgUrl)){
 							// return matchedWord;
 						}else{
@@ -131,11 +128,14 @@ module.exports = function(grunt) {
 							console.log( 'inlineFilePath: '+inlineFilePath);
 							var absoluteImgurl = path.resolve( path.dirname(inlineFilePath),imgUrl );
 							console.log( 'absoluteImgurl: '+absoluteImgurl);
-							imgUrlRelativeToParentFile = path.relative( path.dirname(filepath), absoluteImgurl );
-							console.log( 'imgUrlRelativeToParentFile: '+imgUrlRelativeToParentFile);
+							newUrl = path.relative( path.dirname(filepath), absoluteImgurl );
+							console.log( 'newUrl: '+newUrl);
+
+							if(grunt.file.exists(absoluteImgurl))
+								newUrl = datauri(absoluteImgurl);
 						}
-						// console.log('imgUrlRelativeToParentFile: '+imgUrlRelativeToParentFile);
-						return matchedWord.replace(imgUrl, imgUrlRelativeToParentFile);
+						// console.log('newUrl: '+newUrl);
+						return matchedWord.replace(imgUrl, newUrl);
 					});
 					styleSheetContent = options.cssmin ? CleanCSS.process(styleSheetContent) : styleSheetContent;
 					ret = '<style>\n' + styleSheetContent + '\n</style>';
@@ -150,7 +150,7 @@ module.exports = function(grunt) {
 		}).replace(/<img.+?src=["']([^"']+?)["'].*?\/?\s*?>/g, function(matchedWord, src){
 			var	ret = matchedWord;
 			
-			if(!grunt.file.isPathAbsolute(src) && src.indexOf('__inline')!=-1){
+			if(!grunt.file.isPathAbsolute(src) && src.indexOf(options.tag)!=-1){
 
 				var inlineFilePath = path.resolve( path.dirname(filepath), src ).replace(/\?.*$/, '');	// 将参数去掉	
 
