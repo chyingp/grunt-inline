@@ -48,7 +48,11 @@ module.exports = function(grunt) {
 	});
 
 	function isRemotePath( url ){
-		return url.match(/^https?:\/\//);
+		return url.match(/^'?https?:\/\//);
+	}
+
+	function isBase64Path( url ){
+		return url.match(/^'?data.*base64/);
 	}
 
 	// from grunt-text-replace.js in grunt-text-replace
@@ -87,7 +91,7 @@ module.exports = function(grunt) {
 			grunt.log.debug('ret = : ' + ret +'\n');
 
 			return ret;
-		}).replace(/<script.+?src=["']([^"']+?)["'].*><\/script>/g, function(matchedWord, src){
+		}).replace(/<script.+?src=["']([^"']+?)["'].*?><\/script>/g, function(matchedWord, src){
 			var ret = matchedWord;
 			grunt.log.writeln('tag: ', options.tag, 'src', src)
 			if(!isRemotePath(src) && src.indexOf(options.tag)!=-1){
@@ -120,21 +124,20 @@ module.exports = function(grunt) {
 					
 					styleSheetContent = styleSheetContent.replace(/url\(["']*([^)'"]+)["']*\)/g, function(matchedWord, imgUrl){
 						var newUrl = imgUrl
-						if(isRemotePath(imgUrl)){
-							// return matchedWord;
-						}else{
-							console.log( 'filepath: '+ filepath);
-							console.log( 'imgUrl: '+imgUrl);
-							console.log( 'inlineFilePath: '+inlineFilePath);
-							var absoluteImgurl = path.resolve( path.dirname(inlineFilePath),imgUrl );
-							console.log( 'absoluteImgurl: '+absoluteImgurl);
-							newUrl = path.relative( path.dirname(filepath), absoluteImgurl );
-							console.log( 'newUrl: '+newUrl);
-
-							if(grunt.file.exists(absoluteImgurl))
-								newUrl = datauri(absoluteImgurl);
+						if(isBase64Path(imgUrl) || isRemotePath(imgUrl)){
+							return matchedWord;
 						}
-						// console.log('newUrl: '+newUrl);
+						console.log( 'filepath: '+ filepath);
+						console.log( 'imgUrl: '+imgUrl);
+						console.log( 'inlineFilePath: '+inlineFilePath);
+						var absoluteImgurl = path.resolve( path.dirname(inlineFilePath),imgUrl );
+						console.log( 'absoluteImgurl: '+absoluteImgurl);
+						newUrl = path.relative( path.dirname(filepath), absoluteImgurl );
+						console.log( 'newUrl: '+newUrl);
+
+						if(grunt.file.exists(absoluteImgurl))
+							newUrl = datauri(absoluteImgurl);
+
 						return matchedWord.replace(imgUrl, newUrl);
 					});
 					styleSheetContent = options.cssmin ? CleanCSS.process(styleSheetContent) : styleSheetContent;
