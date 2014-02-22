@@ -1,8 +1,8 @@
 /*
  * casper-inline
- * https://github.com/tactivos/casper-inline
+ * https://github.com/chyingp/grunt-inline
  *
- * Copyright (c) 2013 Auguest G. casper & IMWEB TEAM
+ * Copyright (c) 2014 Auguest G. casper & IMWEB TEAM
  */
 
 'use strict';
