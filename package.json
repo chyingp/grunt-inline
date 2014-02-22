@@ -5,8 +5,8 @@
     "url": "https://github.com/chyingp"
   },
   "name": "grunt-inline",
-  "description": "将标记为inline的<script>、<link>、<img>等资源进行内嵌",
-  "version": "0.2.2",
+  "description": "Inlines <img>, <script> and <link> tags into the same file.",
+  "version": "0.2.4",
   "keywords": [
     "gruntplugin",
     "inline",
