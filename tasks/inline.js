@@ -51,7 +51,11 @@ module.exports = function(grunt) {
 	});
 
 	function isRemotePath( url ){
-		return url.match(/^https?:\/\//);
+		return url.match(/^'?https?:\/\//);
+	}
+
+	function isBase64Path( url ){
+		return url.match(/^'?data.*base64/);
 	}
 
 	// from grunt-text-replace.js in grunt-text-replace
@@ -76,7 +80,7 @@ module.exports = function(grunt) {
 		fileContent = fileContent.replace(/<inline.+?src=["']([^"']+?)["']\s*?\/>/g, function(matchedWord, src){
 			var ret = matchedWord;
 
-			if(isRemotePath(src) && !grunt.file.isPathAbsolute(src)){
+			if(isRemotePath(src) || !grunt.file.isPathAbsolute(src)){
 
 				var inlineFilePath = path.resolve( path.dirname(filepath), src );
 				grunt.log.writeln('inline >inline file，src = ' + src + ', 实际路径：'+inlineFilePath);
@@ -123,6 +127,9 @@ module.exports = function(grunt) {
 					
 					styleSheetContent = styleSheetContent.replace(/url\(([^)]+)\)/g, function(matchedWord, imgUrl){
 						var imgUrlRelativeToParentFile = imgUrl;
+						if(isBase64Path(imgUrl)){
+							return matchedWord;
+						}
 						if(isRemotePath(imgUrl)){
 							// return matchedWord;
 						}else{
