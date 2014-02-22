@@ -70,6 +70,25 @@ grunt.initConfig({
 });
 ```
 
+### tag (defaults to ```__inline```)
+Only URLs that contain the value for ```tag``` will be inlined.
+Specify ```tag: ''``` to include all urls.
+
+```
+grunt.initConfig({
+	inline: {
+		dist: {
+			options:{
+				tag: ''
+			},
+			src: ['dist/index.html'],
+			dest: ['dest/']
+		}
+	}
+});
+```
+
+
 ### uglify
 If uglify is assigned true, `.js` file will be minified before inlined.
 
