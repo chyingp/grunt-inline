@@ -14,11 +14,7 @@ module.exports = function(grunt) {
 	var UglifyJS = require("uglify-js");
 	var CleanCSS = require('clean-css');
 
-	grunt.registerMultiTask('inline', "将标记为inline的<script>、<link>、<img>等资源进行内嵌", function() {
-		// grunt.log.writeln( typeof this.options('copy') );
-		// grunt.log.writeln( JSON.stringify(this.options('copy')) );
-
-		grunt.log.subhead('inline任务开始！！\n');
+	grunt.registerMultiTask('inline', "Replaces <link>, <script> and <img> tags to their inline contents", function() {
 		var files = this.filesSrc,
 			options = this.options({tag: '__inline'}),
 			uglify = !!options.uglify,
@@ -30,21 +26,18 @@ module.exports = function(grunt) {
 			var fileType = path.extname(filepath).replace(/^\./, '');
 			var fileContent = grunt.file.read(filepath);
 
-			grunt.log.writeln('inline > 处理文件开始：'+ filepath);
-			
+			grunt.log.write('Processing ' + filepath + '...')
+
 			if(fileType==='html'){
 				fileContent = html(filepath, fileContent, relativeTo, options);
 			}else if(fileType==='css'){
-				//fileContent = html(filepath, fileContent);
+				fileContent = css(filepath, fileContent, relativeTo, options);
 			}
 
 			var destFile = getPathToDestination(filepath, dest);
-			grunt.log.writeln('inline > 目标路径：'+ destFile);
 			grunt.file.write(destFile,fileContent);
-			grunt.log.subhead('inline > 处理文件结束：'+ filepath);
+			grunt.log.ok()
 		});
-		grunt.log.subhead('inline任务结束！！');
-
 	});
 
 	function isRemotePath( url ){
@@ -69,10 +62,9 @@ module.exports = function(grunt) {
 	}
 
 	function html(filepath, fileContent, relativeTo, options){
-
-        if(relativeTo){
-            filepath = filepath.replace(/[^\/]+\//g, relativeTo);
-        }
+    if(relativeTo){
+        filepath = filepath.replace(/[^\/]+\//g, relativeTo);
+    }
 
 		fileContent = fileContent.replace(/<inline.+?src=["']([^"']+?)["']\s*?\/>/g, function(matchedWord, src){
 			var ret = matchedWord;
@@ -80,30 +72,24 @@ module.exports = function(grunt) {
 			if(isRemotePath(src) || !grunt.file.isPathAbsolute(src)){
 
 				var inlineFilePath = path.resolve( path.dirname(filepath), src );
-				grunt.log.writeln('inline >inline file，src = ' + src + ', 实际路径：'+inlineFilePath);
-
 				if( grunt.file.exists(inlineFilePath) ){
 					ret = grunt.file.read( inlineFilePath );
 				}else{
-					grunt.log.error('inline > '+inlineFilePath + ' 不存在！');
+					grunt.log.error("Couldn't find " + inlineFilePath + '!');
 				}
 			}
-			grunt.log.debug('ret = : ' + ret +'\n');
 
 			return ret;
 		}).replace(/<script.+?src=["']([^"']+?)["'].*?><\/script>/g, function(matchedWord, src){
 			var ret = matchedWord;
-			grunt.log.writeln('tag: ', options.tag, 'src', src)
+
 			if(!isRemotePath(src) && src.indexOf(options.tag)!=-1){
-
 				var inlineFilePath = path.resolve( path.dirname(filepath), src ).replace(/\?.*$/, '');	// 将参数去掉
-				grunt.log.writeln('inline >inline script，src = ' + src + ', 实际路径：'+inlineFilePath);
-
 				var c = options.uglify ? UglifyJS.minify(inlineFilePath).code : grunt.file.read( inlineFilePath );
 				if( grunt.file.exists(inlineFilePath) ){
 					ret = '<script>\n' + c + '\n</script>';
 				}else{
-					grunt.log.error('inline > '+inlineFilePath + ' 不存在！');
+					grunt.log.error("Couldn't find " + inlineFilePath + '!');
 				}
 			}					
 			grunt.log.debug('ret = : ' + ret +'\n');
@@ -117,34 +103,11 @@ module.exports = function(grunt) {
 
 				var inlineFilePath = path.resolve( path.dirname(filepath), src ).replace(/\?.*$/, '');	// 将参数去掉	
 
-				grunt.log.writeln('inline > inline stylesheet，href = ' + src, ', 实际路径： ' + inlineFilePath);
-
 				if( grunt.file.exists(inlineFilePath) ){
 					var styleSheetContent = grunt.file.read( inlineFilePath );
-					
-					styleSheetContent = styleSheetContent.replace(/url\(["']*([^)'"]+)["']*\)/g, function(matchedWord, imgUrl){
-						var newUrl = imgUrl
-						if(isBase64Path(imgUrl) || isRemotePath(imgUrl)){
-							return matchedWord;
-						}
-						console.log( 'filepath: '+ filepath);
-						console.log( 'imgUrl: '+imgUrl);
-						console.log( 'inlineFilePath: '+inlineFilePath);
-						var absoluteImgurl = path.resolve( path.dirname(inlineFilePath),imgUrl );
-						console.log( 'absoluteImgurl: '+absoluteImgurl);
-						newUrl = path.relative( path.dirname(filepath), absoluteImgurl );
-						console.log( 'newUrl: '+newUrl);
-
-						if(grunt.file.exists(absoluteImgurl))
-							newUrl = datauri(absoluteImgurl);
-
-						return matchedWord.replace(imgUrl, newUrl);
-					});
-					styleSheetContent = options.cssmin ? CleanCSS.process(styleSheetContent) : styleSheetContent;
-					ret = '<style>\n' + styleSheetContent + '\n</style>';
-
+					ret = '<style>\n' + css(inlineFilePath, styleSheetContent, relativeTo, options) + '\n</style>';
 				}else{
-					grunt.log.error('inline > '+inlineFilePath + ' 不存在！');
+					grunt.log.error("Couldn't find " + inlineFilePath + '!');
 				}
 			}
 			grunt.log.debug('ret = : ' + ret +'\n');
@@ -157,18 +120,43 @@ module.exports = function(grunt) {
 
 				var inlineFilePath = path.resolve( path.dirname(filepath), src ).replace(/\?.*$/, '');	// 将参数去掉	
 
-				grunt.log.writeln('inline > inline img，src = ' + src, ', 实际路径： ' + inlineFilePath);
-
 				if( grunt.file.exists(inlineFilePath) ){
 					ret = matchedWord.replace(src, 'data:image/png;base64'+(new datauri(inlineFilePath)).content);
 				}else{
-					grunt.log.error('inline > '+inlineFilePath + ' 不存在！');
+					grunt.log.error("Couldn't find " + inlineFilePath + '!');
 				}
 			}					
 			grunt.log.debug('ret = : ' + ret +'\n');
 			
 			return ret;	
 		});
+
+		return fileContent;
+	}
+
+	function css(filepath, fileContent, relativeTo, options) {
+    if(relativeTo){
+        filepath = filepath.replace(/[^\/]+\//g, relativeTo);
+    }
+
+		fileContent = fileContent.replace(/url\(["']*([^)'"]+)["']*\)/g, function(matchedWord, imgUrl){
+			var newUrl = imgUrl
+			if(isBase64Path(imgUrl) || isRemotePath(imgUrl)){
+				return matchedWord;
+			}
+			grunt.log.debug( 'imgUrl: '+imgUrl);
+			grunt.log.debug( 'filepath: '+filepath);
+			var absoluteImgurl = path.resolve( path.dirname(filepath),imgUrl );
+			grunt.log.debug( 'absoluteImgurl: '+absoluteImgurl);
+			newUrl = path.relative( path.dirname(filepath), absoluteImgurl );
+			grunt.log.debug( 'newUrl: '+newUrl);
+
+			if(grunt.file.exists(absoluteImgurl))
+				newUrl = datauri(absoluteImgurl);
+
+			return matchedWord.replace(imgUrl, newUrl);
+		});
+		fileContent = options.cssmin ? CleanCSS.process(fileContent) : fileContent;
 
 		return fileContent;
 	}

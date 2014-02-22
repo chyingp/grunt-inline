@@ -1,18 +1,27 @@
 # grunt-inline[![build status](https://secure.travis-ci.org/miniflycn/grunt-inline.png)](http://travis-ci.org/miniflycn/grunt-inline)
 
-> 将html页面里的外链资源，比如js、css、img，变成内联资源。比如：
+Brings externally referenced resources, such as js, css and images, into
+a single file. 
 
-带有`__inline`标记的`link`标签，会变成内联样式
+For exmample:
 
-	<link href="css/style.css?__inline=true" rel="stylesheet" />
+````
+<link href="css/style.css?__inline=true" rel="stylesheet" />
+````
+is replaced with 
+````
+<style>
+/* contents of css/style.css */
+</style>
+```
 
-带有`__inline`标记的`img`标签，会变成内联base64字符串
+Javascript references are brought inline, and images in the html
+and css blocks are converted to base-64 data: urls. 
 
-	<img src="img/icon.png?__inline=true" />
+By default, only urls marked with `__inline` are converted, however this
+behavior can be overrided via the `tag:` option.
 
-带有`__inline`标记的`script`标签，会变成内联脚本
-			
-	<script src="js/erport.js?__inline=true"></script> 
+
 ## Getting Started
 This plugin requires Grunt `~0.4.1`
 
@@ -184,6 +193,7 @@ Then, after the `inline` task is run, the original content in `index.html` will 
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
+* 2014-01-31  v0.2.3 radded tag option, encode url(..) images.  
 * 2013-10-31  v0.2.2 bug fix: img urls like 'background: url(http://www.example.com/img/bg.png)' will be transformed to 'background: url(url(http://www.example.com/img/bg.png))'
 * 2013-10-30  v0.2.1 bug fix: when processing relative file path of img url in css stylesheet, forgot to transform "\" to "/" for windows users
 * 2013-10-30  v0.2.0 new feature: Support for minifing js、css when they ar inlined into html. 
