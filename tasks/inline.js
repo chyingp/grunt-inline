@@ -105,7 +105,7 @@ module.exports = function(grunt) {
 
 				if( grunt.file.exists(inlineFilePath) ){
 					var styleSheetContent = grunt.file.read( inlineFilePath );
-					ret = '<style>\n' + css(inlineFilePath, styleSheetContent, relativeTo, options) + '\n</style>';
+					ret = '<style>\n' + cssInlineToHtml(filepath, inlineFilePath, styleSheetContent, relativeTo, options) + '\n</style>';
 				}else{
 					grunt.log.error("Couldn't find " + inlineFilePath + '!');
 				}
@@ -135,12 +135,13 @@ module.exports = function(grunt) {
 	}
 
 	function css(filepath, fileContent, relativeTo, options) {
-    if(relativeTo){
-        filepath = filepath.replace(/[^\/]+\//g, relativeTo);
-    }
+	    if(relativeTo){
+	        filepath = filepath.replace(/[^\/]+\//g, relativeTo);
+	    }
 
 		fileContent = fileContent.replace(/url\(["']*([^)'"]+)["']*\)/g, function(matchedWord, imgUrl){
-			var newUrl = imgUrl
+			var newUrl = imgUrl;
+			var flag = !!imgUrl.match(/\?__inline/);	// urls like "img/bg.png?__inline" will be transformed to base64
 			if(isBase64Path(imgUrl) || isRemotePath(imgUrl)){
 				return matchedWord;
 			}
@@ -151,8 +152,46 @@ module.exports = function(grunt) {
 			newUrl = path.relative( path.dirname(filepath), absoluteImgurl );
 			grunt.log.debug( 'newUrl: '+newUrl);
 
-			if(grunt.file.exists(absoluteImgurl))
+			absoluteImgurl = absoluteImgurl.replace(/\?.*$/, '');
+			if(flag && grunt.file.exists(absoluteImgurl)){
 				newUrl = datauri(absoluteImgurl);
+			}else{
+				newUrl = newUrl.replace(/\\/g, '/');
+			}
+
+			return matchedWord.replace(imgUrl, newUrl);
+		});
+		fileContent = options.cssmin ? CleanCSS.process(fileContent) : fileContent;
+
+		return fileContent;
+	}
+
+	function cssInlineToHtml(htmlFilepath, filepath, fileContent, relativeTo, options) {
+	    if(relativeTo){
+	        filepath = filepath.replace(/[^\/]+\//g, relativeTo);
+	    }
+
+		fileContent = fileContent.replace(/url\(["']*([^)'"]+)["']*\)/g, function(matchedWord, imgUrl){
+			var newUrl = imgUrl;
+			var flag = !!imgUrl.match(/\?__inline/);	// urls like "img/bg.png?__inline" will be transformed to base64
+			grunt.log.debug('flag:'+flag);
+			if(isBase64Path(imgUrl) || isRemotePath(imgUrl)){
+				return matchedWord;
+			}
+			grunt.log.debug( 'imgUrl: '+imgUrl);
+			grunt.log.debug( 'filepath: '+filepath);
+			var absoluteImgurl = path.resolve( path.dirname(filepath),imgUrl );	// img url relative to project root
+			grunt.log.debug( 'absoluteImgurl: '+absoluteImgurl);
+			newUrl = path.relative( path.dirname(htmlFilepath), absoluteImgurl );	// img url relative to the html file
+			grunt.log.debug([htmlFilepath, filepath, absoluteImgurl, imgUrl]);
+			grunt.log.debug( 'newUrl: '+newUrl);
+
+			absoluteImgurl = absoluteImgurl.replace(/\?.*$/, '');
+			if(flag && grunt.file.exists(absoluteImgurl)){
+				newUrl = datauri(absoluteImgurl);
+			}else{
+				newUrl = newUrl.replace(/\\/g, '/');
+			}
 
 			return matchedWord.replace(imgUrl, newUrl);
 		});
