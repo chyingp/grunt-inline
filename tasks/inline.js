@@ -80,7 +80,7 @@ module.exports = function(grunt) {
 			}
 
 			return ret;
-		}).replace(/<script.+?src=["']([^"']+?)["'].*?><\/script>/g, function(matchedWord, src){
+		}).replace(/<script.+?src=["']([^"']+?)["'].*?>\s*<\/script>/g, function(matchedWord, src){
 			var ret = matchedWord;
 
 			if(!isRemotePath(src) && src.indexOf(options.tag)!=-1){
