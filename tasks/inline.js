@@ -99,7 +99,7 @@ module.exports = function(grunt) {
 		}).replace(/<link.+?href=["']([^"']+?)["'].*?\/?>/g, function(matchedWord, src){
 			var ret = matchedWord;
 			
-			if(!isBase64Path(src) && isBase64Path!isRemotePath(src) && src.indexOf(options.tag)!=-1){
+			if(!isBase64Path(src) && !isRemotePath(src) && src.indexOf(options.tag)!=-1){
 
 				var inlineFilePath = path.resolve( path.dirname(filepath), src ).replace(/\?.*$/, '');	// 将参数去掉	
 
