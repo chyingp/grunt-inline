@@ -1,5 +1,5 @@
 /*
- * casper-inline
+ * grunt-inline
  * https://github.com/chyingp/grunt-inline
  *
  * Copyright (c) 2014 Auguest G. casper & IMWEB TEAM
@@ -62,9 +62,9 @@ module.exports = function(grunt) {
 	}
 
 	function html(filepath, fileContent, relativeTo, options){
-    if(relativeTo){
-        filepath = filepath.replace(/[^\/]+\//g, relativeTo);
-    }
+	    if(relativeTo){
+	        filepath = filepath.replace(/[^\/]+\//, relativeTo);
+	    }
 
 		fileContent = fileContent.replace(/<inline.+?src=["']([^"']+?)["']\s*?\/>/g, function(matchedWord, src){
 			var ret = matchedWord;
