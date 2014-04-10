@@ -74,6 +74,20 @@ module.exports = function(grunt) {
 				var inlineFilePath = path.resolve( path.dirname(filepath), src );
 				if( grunt.file.exists(inlineFilePath) ){
 					ret = grunt.file.read( inlineFilePath );
+
+					// @otod need to be checked, add bye herbert
+					var _more = src.match(/^(..\/)+/ig);
+					if(_more = _more && _more[0]){
+						var _addMore = function(){
+							var	_ret = arguments[0],_src = arguments[2];
+							if(!_src.match(/^http\:\/\//)){
+								_ret =arguments[1] +  _more + arguments[2] + arguments[3];
+								grunt.log.writeln('inline >含有相对目录进行替换操作,替换之后的路径：' + _ret );
+							}
+							return _ret;	
+						}
+						ret = ret.replace(/(<script.+?src=["'])([^"']+?)(["'].*?><\/script>)/g,_addMore);
+					}
 				}else{
 					grunt.log.error("Couldn't find " + inlineFilePath + '!');
 				}
