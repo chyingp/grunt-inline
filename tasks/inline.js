@@ -135,7 +135,7 @@ module.exports = function(grunt) {
 				var inlineFilePath = path.resolve( path.dirname(filepath), src ).replace(/\?.*$/, '');	// 将参数去掉	
 
 				if( grunt.file.exists(inlineFilePath) ){
-					ret = matchedWord.replace(src, 'data:image/png;base64'+(new datauri(inlineFilePath)).content);
+					ret = matchedWord.replace(src, (new datauri(inlineFilePath)).content);
 				}else{
 					grunt.log.error("Couldn't find " + inlineFilePath + '!');
 				}
