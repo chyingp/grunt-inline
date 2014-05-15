@@ -22,10 +22,12 @@ module.exports = function(grunt) {
 				files: {
 					'tmp/css.min.html': 'tmp/css.html',
 					'tmp/img.min.html': 'tmp/img.html',
+					'tmp/favicon.min.html': 'tmp/favicon.html',
 					'tmp/html.min.html': 'tmp/html.html',
 					'tmp/script.min.html': 'tmp/script.html',
 					'tmp/css_greedy.min.html': 'tmp/css_greedy.html',
 					'tmp/img_greedy.min.html': 'tmp/img_greedy.html',
+					'tmp/favicon_greedy.min.html': 'tmp/favicon_greedy.html',
 					'tmp/html_greedy.min.html': 'tmp/html_greedy.html',
 					'tmp/script_greedy.min.html': 'tmp/script_greedy.html'
 				}
