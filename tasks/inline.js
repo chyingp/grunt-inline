@@ -127,7 +127,7 @@ module.exports = function(grunt) {
 			grunt.log.debug('ret = : ' + ret +'\n');
 			
 			return ret;	
-		}).replace(/<img.+?src=["']([^"']+?)["'].*?\/?\s*?>/g, function(matchedWord, src){
+		}).replace(/<img.+?src=["']([^"':]+?)["'].*?\/?\s*?>/g, function(matchedWord, src){
 			var	ret = matchedWord;
 			
 			if(!grunt.file.isPathAbsolute(src) && src.indexOf(options.tag)!=-1){
