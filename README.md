@@ -193,6 +193,7 @@ Then, after the `inline` task is run, the original content in `index.html` will 
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
+* 2014-05-19 v0.2.9 bug fix: options.tag is assigned '', bug image url in css are not converted to base64 formate
 * 2014-03-06  v0.2.6 bug fix: script tags like <script src="index.js?__inline">\n</script> were not inlined
 * 2014-01-31  v0.2.3 radded tag option, encode url(..) images.  
 * 2013-10-31  v0.2.2 bug fix: img urls like 'background: url(http://www.example.com/img/bg.png)' will be transformed to 'background: url(url(http://www.example.com/img/bg.png))'

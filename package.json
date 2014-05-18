@@ -6,7 +6,7 @@
   },
   "name": "grunt-inline",
   "description": "Inlines <img>, <script> and <link> tags into the same file.",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "keywords": [
     "gruntplugin",
     "inline",
