@@ -155,7 +155,7 @@ module.exports = function(grunt) {
 
 		fileContent = fileContent.replace(/url\(["']*([^)'"]+)["']*\)/g, function(matchedWord, imgUrl){
 			var newUrl = imgUrl;
-			var flag = !!imgUrl.match(/\?__inline/);	// urls like "img/bg.png?__inline" will be transformed to base64
+			var flag = imgUrl.indexOf(options.tag)!=-1;	// urls like "img/bg.png?__inline" will be transformed to base64
 			if(isBase64Path(imgUrl) || isRemotePath(imgUrl)){
 				return matchedWord;
 			}
