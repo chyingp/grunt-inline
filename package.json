@@ -5,8 +5,8 @@
     "url": "https://github.com/chyingp"
   },
   "name": "grunt-inline",
-  "description": "Inlines <img>, <script> and <link> tags into the same file.",
-  "version": "0.2.9",
+  "description": "Inlines img, script and link tags into the same file.",
+  "version": "0.3.0",
   "keywords": [
     "gruntplugin",
     "inline",

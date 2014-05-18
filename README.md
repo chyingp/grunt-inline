@@ -114,6 +114,25 @@ grunt.initConfig({
 	}
 });
 ```
+
+### exts
+Setting an exts array allows multiple file extensions to be processed as
+html.
+
+```
+grunt.initConfig({
+	inline: {
+		dist: {
+			options:{
+				uglify: true
+			},
+			src: ['dist/index.html'],
+			dest: ['dest/']
+		}
+	}
+});
+```
+
 ### Usage Examples
 
 > config
@@ -121,8 +140,7 @@ grunt.initConfig({
 	grunt.initConfig({
 	  inline: {
 	    dist: {
-	      src: [ 'dist/index.html' ],
-	      dest: [ 'dev/' ]
+	      src: [ 'dist/index.jade' ]
 	    }
 	  }
 	})
@@ -193,6 +211,7 @@ Then, after the `inline` task is run, the original content in `index.html` will 
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
+* 2014-05-19 v0.3.0 support for new options.exts
 * 2014-05-19 v0.2.9 bug fix: options.tag is assigned '', bug image url in css are not converted to base64 formate
 * 2014-03-06  v0.2.6 bug fix: script tags like <script src="index.js?__inline">\n</script> were not inlined
 * 2014-01-31  v0.2.3 radded tag option, encode url(..) images.  
