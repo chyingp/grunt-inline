@@ -19,7 +19,8 @@ module.exports = function(grunt) {
 			options = this.options({tag: '__inline'}),
 			uglify = !!options.uglify,
 			cssmin = !!options.cssmin,
-		    	relativeTo = this.options().relativeTo,
+		    relativeTo = this.options().relativeTo,
+		    exts = options.exts,
 			dest = this.data.dest;
 
 		files.forEach(function(filepath){
@@ -28,7 +29,7 @@ module.exports = function(grunt) {
 
 			grunt.log.write('Processing ' + filepath + '...')
 
-			if(fileType==='html'){
+			if(fileType==='html' || (exts && exts.indexOf(fileType) > -1)){
 				fileContent = html(filepath, fileContent, relativeTo, options);
 			}else if(fileType==='css'){
 				fileContent = css(filepath, fileContent, relativeTo, options);
