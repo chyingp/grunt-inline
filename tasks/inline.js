@@ -8,7 +8,7 @@
 'use strict';
 
 module.exports = function(grunt) {
-	
+
 	var path = require('path');
 	var datauri = require('datauri');
 	var UglifyJS = require("uglify-js");

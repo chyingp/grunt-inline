@@ -154,7 +154,7 @@ grunt.initConfig({
 		</head>
 		<body>
 			<img src="img/icon.png?__inline=true" />
-			
+
 			<script src="js/erport.js?__inline=true"></script> 
 		</body>
 	</html>
@@ -211,6 +211,7 @@ Then, after the `inline` task is run, the original content in `index.html` will 
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
+* 2014-06-15 v0.3.1 bug fix: when options.tag is '', then all img tags, whose src attribute has already been inlined will be matched.
 * 2014-05-19 v0.3.0 support for new options.exts
 * 2014-05-19 v0.2.9 bug fix: options.tag is assigned '', bug image url in css are not converted to base64 formate
 * 2014-03-06  v0.2.6 bug fix: script tags like <script src="index.js?__inline">\n</script> were not inlined
