@@ -22,7 +22,7 @@ function assertFileEquality(test, pathToActual, pathToExpected, message) {
 exports.inline = function(test) {
     'use strict';
 
-    test.expect(4);
+    test.expect(5);
 
     assertFileEquality(test,
       'tmp/img_greedy.min.html',
@@ -33,6 +33,11 @@ exports.inline = function(test) {
       'tmp/css_greedy.min.html',
       'test/expected/css_greedy.min.html',
       'Should compile two link target without newline characters');
+
+    assertFileEquality(test,
+      'tmp/favicon_greedy.min.html',
+      'test/expected/favicon_greedy.min.html',
+      'Should compile two favicon target without newline characters');
 
     assertFileEquality(test,
       'tmp/html_greedy.min.html',

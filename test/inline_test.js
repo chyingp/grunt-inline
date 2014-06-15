@@ -22,7 +22,7 @@ function assertFileEquality(test, pathToActual, pathToExpected, message) {
 exports.inline = function(test) {
     'use strict';
 
-    test.expect(4);
+    test.expect(5);
 
     assertFileEquality(test,
       'tmp/css.min.html',
@@ -33,6 +33,11 @@ exports.inline = function(test) {
       'tmp/img.min.html',
       'test/expected/img.min.html',
       'Should compile image inline');
+
+    assertFileEquality(test,
+      'tmp/favicon.min.html',
+      'test/expected/favicon.min.html',
+      'Should compile favicon inline');
 
     assertFileEquality(test,
       'tmp/html.min.html',
