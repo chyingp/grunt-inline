@@ -42,7 +42,7 @@ module.exports = function(grunt) {
 	});
 
 	function isRemotePath( url ){
-		return url.match(/^'?https?:\/\//);
+		return url.match(/^'?https?:\/\//) || url.match(/^\/\//);
 	}
 
 	function isBase64Path( url ){
