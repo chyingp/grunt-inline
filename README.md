@@ -1,14 +1,14 @@
 # grunt-inline[![build status](https://secure.travis-ci.org/miniflycn/grunt-inline.png)](http://travis-ci.org/miniflycn/grunt-inline)
 
 Brings externally referenced resources, such as js, css and images, into
-a single file. 
+a single file.
 
 For exmample:
 
 ````
 <link href="css/style.css?__inline=true" rel="stylesheet" />
 ````
-is replaced with 
+is replaced with
 ````
 <style>
 /* contents of css/style.css */
@@ -16,7 +16,7 @@ is replaced with
 ```
 
 Javascript references are brought inline, and images in the html
-and css blocks are converted to base-64 data: urls. 
+and css blocks are converted to base-64 data: urls.
 
 By default, only urls marked with `__inline` are converted, however this
 behavior can be overrided via the `tag:` option.
@@ -98,6 +98,26 @@ grunt.initConfig({
 ```
 
 
+### inlineTagAttributes
+Ability to add attributes string to inline tag.
+
+```
+grunt.initConfig({
+	inline: {
+		dist: {
+			options:{
+				inlineTagAttributes: {
+					script: 'data-inlined="true"',	// Adds ```<script data-inlined="true">...</script>```
+					style: 'data-inlined="true"'	// Adds ```<style data-inlined="true">...</style>```
+			},
+			src: ['dist/index.html'],
+			dest: ['dest/']
+		}
+	}
+});
+```
+
+
 ### uglify
 If uglify is assigned true, `.js` file will be minified before inlined.
 
@@ -155,7 +175,7 @@ grunt.initConfig({
 		<body>
 			<img src="img/icon.png?__inline=true" />
 
-			<script src="js/erport.js?__inline=true"></script> 
+			<script src="js/erport.js?__inline=true"></script>
 		</body>
 	</html>
 
@@ -173,7 +193,7 @@ grunt.initConfig({
 		<body>
 			<! -- base64, a terrible mass you know…so just show a little bit ...-->
 			<img src="idata:image/png;base64data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEMAAAAYCAYAAAChg0BHAA..." />
-			
+
 			<script>
 				var Report = (function(){
 					return {
@@ -216,10 +236,10 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 * 2014-05-19 v0.3.0 support for new options.exts
 * 2014-05-19 v0.2.9 bug fix: options.tag is assigned '', bug image url in css are not converted to base64 formate
 * 2014-03-06  v0.2.6 bug fix: script tags like <script src="index.js?__inline">\n</script> were not inlined
-* 2014-01-31  v0.2.3 radded tag option, encode url(..) images.  
+* 2014-01-31  v0.2.3 radded tag option, encode url(..) images.
 * 2013-10-31  v0.2.2 bug fix: img urls like 'background: url(http://www.example.com/img/bg.png)' will be transformed to 'background: url(url(http://www.example.com/img/bg.png))'
 * 2013-10-30  v0.2.1 bug fix: when processing relative file path of img url in css stylesheet, forgot to transform "\" to "/" for windows users
-* 2013-10-30  v0.2.0 new feature: Support for minifing js、css when they ar inlined into html. 
+* 2013-10-30  v0.2.0 new feature: Support for minifing js、css when they ar inlined into html.
 * 2013-08-30  v0.1.9 bug fix: stylesheets ended with ">" cannot be inlined
 * 2013-09-02  v0.1.9 add feature: add options.dest to assign a destination path where the source file will be copied
 * 2013-09-02  v0.1.8 add feature: support for `<inline>` tag
