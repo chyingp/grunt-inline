@@ -107,8 +107,8 @@ grunt.initConfig({
 		dist: {
 			options:{
 				inlineTagAttributes: {
-					script: 'data-inlined="true"',	// Adds ```<script data-inlined="true">...</script>```
-					style: 'data-inlined="true"'	// Adds ```<style data-inlined="true">...</style>```
+					js: 'data-inlined="true"',	// Adds ```<script data-inlined="true">...</script>```
+					css: 'data-inlined="true"'	// Adds ```<style data-inlined="true">...</style>```
 			},
 			src: ['dist/index.html'],
 			dest: ['dest/']
