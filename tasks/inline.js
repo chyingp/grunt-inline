@@ -33,7 +33,7 @@ module.exports = function(grunt) {
 			var fileType = path.extname(filepath).replace(/^\./, '');
 			var fileContent = grunt.file.read(filepath);
 
-			grunt.log.write('Processing ' + filepath + '...')
+			grunt.log.write('Processing ' + filepath + '...');
 
 			if(fileType==='html' || (exts && exts.indexOf(fileType) > -1)){
 				fileContent = html(filepath, fileContent, relativeTo, options);
@@ -43,7 +43,7 @@ module.exports = function(grunt) {
 
 			var destFile = getPathToDestination(filepath, dest);
 			grunt.file.write(destFile,fileContent);
-			grunt.log.ok()
+			grunt.log.ok();
 		});
 	});
 
@@ -79,6 +79,9 @@ module.exports = function(grunt) {
 			if(isRemotePath(src) || !grunt.file.isPathAbsolute(src)){
 
 				var inlineFilePath = path.resolve( path.dirname(filepath), src );
+				if(options.root){
+					inlineFilePath = inlineFilePath.replace(/^\//, options.root);
+				}
 				if( grunt.file.exists(inlineFilePath) ){
 					ret = grunt.file.read( inlineFilePath );
 
@@ -92,7 +95,7 @@ module.exports = function(grunt) {
 								grunt.log.writeln('inline >含有相对目录进行替换操作,替换之后的路径：' + _ret );
 							}
 							return _ret;
-						}
+						};
 						ret = ret.replace(/(<script.+?src=["'])([^"']+?)(["'].*?><\/script>)/g,_addMore);
 					}
 				}else{
@@ -106,6 +109,9 @@ module.exports = function(grunt) {
 
 			if(!isRemotePath(src) && src.indexOf(options.tag)!=-1){
 				var inlineFilePath = path.resolve( path.dirname(filepath), src ).replace(/\?.*$/, '');	// 将参数去掉
+				if(options.root){
+					inlineFilePath = inlineFilePath.replace(/^\//, options.root);
+				}
 				var c = options.uglify ? UglifyJS.minify(inlineFilePath).code : grunt.file.read( inlineFilePath );
 				if( grunt.file.exists(inlineFilePath) ){
 					var inlineTagAttributes = options.inlineTagAttributes.js;
@@ -124,7 +130,9 @@ module.exports = function(grunt) {
 			if(!isRemotePath(src) && src.indexOf(options.tag)!=-1){
 
 				var inlineFilePath = path.resolve( path.dirname(filepath), src ).replace(/\?.*$/, '');	// 将参数去掉
-
+				if(options.root){
+					inlineFilePath = inlineFilePath.replace(/^\//, options.root);
+				}
 				if( grunt.file.exists(inlineFilePath) ){
 					var inlineTagAttributes = options.inlineTagAttributes.css;
 					var styleSheetContent = grunt.file.read( inlineFilePath );
@@ -142,7 +150,9 @@ module.exports = function(grunt) {
 			if(!grunt.file.isPathAbsolute(src) && src.indexOf(options.tag)!=-1){
 
 				var inlineFilePath = path.resolve( path.dirname(filepath), src ).replace(/\?.*$/, '');	// 将参数去掉
-
+				if(options.root){
+					inlineFilePath = inlineFilePath.replace(/^\//, options.root);
+				}
 				if( grunt.file.exists(inlineFilePath) ){
 					ret = matchedWord.replace(src, (new datauri(inlineFilePath)).content);
 				}else{
