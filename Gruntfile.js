@@ -48,7 +48,6 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-nodeunit');
 
 	grunt.registerTask('test', ['clean', 'inline', 'htmlmin', 'nodeunit']);
-	grunt.registerTask('run', ['clean', 'inline', 'htmlmin']);
 	// By default, run all tests
 	grunt.registerTask('default', ['test']);
 };
