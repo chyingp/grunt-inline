@@ -144,9 +144,27 @@ grunt.initConfig({
 	inline: {
 		dist: {
 			options:{
-				uglify: true
+				ext: ['xhtml', 'html']
 			},
-			src: ['dist/index.html'],
+			src: ['dist/*'],
+			dest: ['dest/']
+		}
+	}
+});
+```
+
+### exts
+Setting a root path lets you specify where absolute url's should resolve
+to in your project tree.
+
+```
+grunt.initConfig({
+	inline: {
+		dist: {
+			options:{
+				root: 'src/app'
+			},
+			src: ['src/index.html'],
 			dest: ['dest/']
 		}
 	}

@@ -4,6 +4,9 @@ module.exports = function(grunt) {
 	grunt.initConfig({
 		inline: {
 			dist: {
+				options: {
+					root: 'test/dist/'
+				},
 				src: ['test/dist/*.html'],
 				dest: ['tmp/']
 			}
@@ -45,6 +48,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-nodeunit');
 
 	grunt.registerTask('test', ['clean', 'inline', 'htmlmin', 'nodeunit']);
+	grunt.registerTask('run', ['clean', 'inline', 'htmlmin']);
 	// By default, run all tests
 	grunt.registerTask('default', ['test']);
 };

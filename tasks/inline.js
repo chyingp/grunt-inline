@@ -42,7 +42,7 @@ module.exports = function(grunt) {
 			}
 
 			var destFile = getPathToDestination(filepath, dest);
-			grunt.file.write(destFile,fileContent);
+			grunt.file.write(destFile, fileContent);
 			grunt.log.ok();
 		});
 	});
@@ -76,23 +76,26 @@ module.exports = function(grunt) {
 		fileContent = fileContent.replace(/<inline.+?src=["']([^"']+?)["']\s*?\/>/g, function(matchedWord, src){
 			var ret = matchedWord;
 
-			if(isRemotePath(src) || !grunt.file.isPathAbsolute(src)){
+			if(isRemotePath(src) || options.root || !grunt.file.isPathAbsolute(src) ){
 
-				var inlineFilePath = path.resolve( path.dirname(filepath), src );
-				if(options.root){
-					inlineFilePath = inlineFilePath.replace(/^\//, options.root);
+				var inlineFilePath;
+				if(options.root && grunt.file.isPathAbsolute(src)){
+					inlineFilePath = src.replace(/^\//, options.root);
+				}else{
+					inlineFilePath = path.resolve( path.dirname(filepath), src );
 				}
+				 
 				if( grunt.file.exists(inlineFilePath) ){
 					ret = grunt.file.read( inlineFilePath );
 
-					// @otod need to be checked, add bye herbert
+					// @todo needs to be checked by herbert
 					var _more = src.match(/^(..\/)+/ig);
 					if(_more = _more && _more[0]){
 						var _addMore = function(){
 							var	_ret = arguments[0],_src = arguments[2];
 							if(!_src.match(/^http\:\/\//)){
 								_ret =arguments[1] +  _more + arguments[2] + arguments[3];
-								grunt.log.writeln('inline >含有相对目录进行替换操作,替换之后的路径：' + _ret );
+								grunt.log.writeln('inline >Contains a relativel directory path replacement operation, after the replacement of the：' + _ret );
 							}
 							return _ret;
 						};
@@ -108,10 +111,16 @@ module.exports = function(grunt) {
 			var ret = matchedWord;
 
 			if(!isRemotePath(src) && src.indexOf(options.tag)!=-1){
-				var inlineFilePath = path.resolve( path.dirname(filepath), src ).replace(/\?.*$/, '');	// 将参数去掉
-				if(options.root){
-					inlineFilePath = inlineFilePath.replace(/^\//, options.root);
+
+				var inlineFilePath;
+				if(options.root && grunt.file.isPathAbsolute(src)){
+					inlineFilePath = src.replace(/^\//, options.root);
+				}else{
+					inlineFilePath = inlineFilePath = path.resolve( path.dirname(filepath), src );
 				}
+
+				inlineFilePath = inlineFilePath.replace(/\?.*$/, '');	// Remove the query string
+	
 				var c = options.uglify ? UglifyJS.minify(inlineFilePath).code : grunt.file.read( inlineFilePath );
 				if( grunt.file.exists(inlineFilePath) ){
 					var inlineTagAttributes = options.inlineTagAttributes.js;
@@ -129,10 +138,15 @@ module.exports = function(grunt) {
 
 			if(!isRemotePath(src) && src.indexOf(options.tag)!=-1){
 
-				var inlineFilePath = path.resolve( path.dirname(filepath), src ).replace(/\?.*$/, '');	// 将参数去掉
-				if(options.root){
-					inlineFilePath = inlineFilePath.replace(/^\//, options.root);
+				var inlineFilePath;
+				if(options.root && grunt.file.isPathAbsolute(src)){
+					inlineFilePath = src.replace(/^\//, options.root);
+				}else{
+					inlineFilePath = inlineFilePath = path.resolve( path.dirname(filepath), src );
 				}
+
+				inlineFilePath = inlineFilePath.replace(/\?.*$/, '');	// Remove the query string
+
 				if( grunt.file.exists(inlineFilePath) ){
 					var inlineTagAttributes = options.inlineTagAttributes.css;
 					var styleSheetContent = grunt.file.read( inlineFilePath );
@@ -147,12 +161,17 @@ module.exports = function(grunt) {
 		}).replace(/<img.+?src=["']([^"':]+?)["'].*?\/?\s*?>/g, function(matchedWord, src){
 			var	ret = matchedWord;
 
-			if(!grunt.file.isPathAbsolute(src) && src.indexOf(options.tag)!=-1){
+			if((options.root || !grunt.file.isPathAbsolute(src)) && src.indexOf(options.tag)!=-1){
 
-				var inlineFilePath = path.resolve( path.dirname(filepath), src ).replace(/\?.*$/, '');	// 将参数去掉
-				if(options.root){
-					inlineFilePath = inlineFilePath.replace(/^\//, options.root);
+				var inlineFilePath;
+				if(options.root && grunt.file.isPathAbsolute(src)){
+					inlineFilePath = src.replace(/^\//, options.root);
+				}else{
+					inlineFilePath = inlineFilePath = path.resolve( path.dirname(filepath), src );
 				}
+
+				inlineFilePath = inlineFilePath.replace(/\?.*$/, '');	// Remove the query string
+
 				if( grunt.file.exists(inlineFilePath) ){
 					ret = matchedWord.replace(src, (new datauri(inlineFilePath)).content);
 				}else{
