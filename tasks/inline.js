@@ -48,7 +48,7 @@ module.exports = function(grunt) {
 	});
 
 	function isRemotePath( url ){
-		return url.match(/^'?https?:\/\//) || url.match(/^\/\//);
+		return url.match(/^'?https?:\/\//) || url.match(/^\/\//) || (url[0] && url[0] === '/');
 	}
 
 	function isBase64Path( url ){
