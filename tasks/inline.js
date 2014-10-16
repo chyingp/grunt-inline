@@ -73,7 +73,7 @@ module.exports = function(grunt) {
 	        filepath = filepath.replace(/[^\/]+\//, relativeTo);
 	    }
 
-		fileContent = fileContent.replace(/<inline.+?src=["']([^"']+?)["']\s*?\/>/g, function(matchedWord, src){
+		fileContent = fileContent.replace(/<inline[^>]+?src=["']([^"']+?)["']\s*?\/>/g, function(matchedWord, src){
 			var ret = matchedWord;
 
 			if(isRemotePath(src) || !grunt.file.isPathAbsolute(src)){
@@ -93,7 +93,7 @@ module.exports = function(grunt) {
 							}
 							return _ret;
 						}
-						ret = ret.replace(/(<script.+?src=["'])([^"']+?)(["'].*?><\/script>)/g,_addMore);
+						ret = ret.replace(/(<script[^>]+?src=["'])([^"']+?)(["'].*?><\/script>)/g,_addMore);
 					}
 				}else{
 					grunt.log.error("Couldn't find " + inlineFilePath + '!');
@@ -101,7 +101,7 @@ module.exports = function(grunt) {
 			}
 
 			return ret;
-		}).replace(/<script.+?src=["']([^"']+?)["'].*?>\s*<\/script>/g, function(matchedWord, src){
+		}).replace(/<script[^>]+?src=["']([^"']+?)["'].*?>\s*<\/script>/g, function(matchedWord, src){
 			var ret = matchedWord;
 
 			if(!isRemotePath(src) && src.indexOf(options.tag)!=-1){
@@ -118,7 +118,7 @@ module.exports = function(grunt) {
 
 			return ret;
 
-		}).replace(/<link.+?href=["']([^"']+?)["'].*?\/?>/g, function(matchedWord, src){
+		}).replace(/<link[^>]+?href=["']([^"']+?)["'].*?\/?>/g, function(matchedWord, src){
 			var ret = matchedWord;
 
 			if(!isRemotePath(src) && src.indexOf(options.tag)!=-1){
@@ -136,7 +136,7 @@ module.exports = function(grunt) {
 			grunt.log.debug('ret = : ' + ret +'\n');
 
 			return ret;
-		}).replace(/<img.+?src=["']([^"':]+?)["'].*?\/?\s*?>/g, function(matchedWord, src){
+		}).replace(/<img[^>]+?src=["']([^"':]+?)["'].*?\/?\s*?>/g, function(matchedWord, src){
 			var	ret = matchedWord;
 
 			if(!grunt.file.isPathAbsolute(src) && src.indexOf(options.tag)!=-1){
