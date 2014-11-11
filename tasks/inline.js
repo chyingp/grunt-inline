@@ -55,6 +55,20 @@ module.exports = function(grunt) {
 		return url.match(/^'?data.*base64/);
 	}
 
+	function getDataAttribs(attrs) {
+		var matches,
+			reg = /(data-[\a-z-]+="[\w-]+")/gm,
+			dataAttribs = [];
+
+		matches = attrs.match(reg);
+
+		if (matches && matches.length) {
+			dataAttribs.push.apply(dataAttribs, matches);
+		}
+
+		return matches;
+	}
+
 	// from grunt-text-replace.js in grunt-text-replace
 	function getPathToDestination(pathToSource, pathToDestinationFile) {
 		var isDestinationDirectory = (/\/$/).test(pathToDestinationFile);
@@ -101,15 +115,15 @@ module.exports = function(grunt) {
 			}
 
 			return ret;
-		}).replace(/<script.+?src=["']([^"']+?)["'].*?>\s*<\/script>/g, function(matchedWord, src){
-			var ret = matchedWord;
+		}).replace(/<script.+?src=["']([^"']+?)["'](.*?)>\s*<\/script>/g, function(matchedWord, src, attrs){
+			var ret = matchedWord, dataAttribs = getDataAttribs(attrs);
 
 			if(!isRemotePath(src) && src.indexOf(options.tag)!=-1){
 				var inlineFilePath = path.resolve( path.dirname(filepath), src ).replace(/\?.*$/, '');	// 将参数去掉
 				var c = options.uglify ? UglifyJS.minify(inlineFilePath).code : grunt.file.read( inlineFilePath );
 				if( grunt.file.exists(inlineFilePath) ){
 					var inlineTagAttributes = options.inlineTagAttributes.js;
-					ret = '<script ' + inlineTagAttributes + '>\n' + c + '\n</script>';
+					ret = '<script ' + inlineTagAttributes + ' ' + dataAttribs.join(' ') +' >\n' + c + '\n</script>';
 				}else{
 					grunt.log.error("Couldn't find " + inlineFilePath + '!');
 				}
