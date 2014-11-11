@@ -56,17 +56,8 @@ module.exports = function(grunt) {
 	}
 
 	function getDataAttribs(attrs) {
-		var matches,
-			reg = /(data-[\a-z-]+="[\w-]+")/gm,
-			dataAttribs = [];
-
-		matches = attrs.match(reg);
-
-		if (matches && matches.length) {
-			dataAttribs.push.apply(dataAttribs, matches);
-		}
-
-		return matches;
+		var reg = /(data-[\a-z-]+="[\w-]+")/gm;
+		return attrs.match(reg) || [];
 	}
 
 	// from grunt-text-replace.js in grunt-text-replace
