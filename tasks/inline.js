@@ -130,7 +130,7 @@ module.exports = function(grunt) {
 			}
 
 			return ret;
-		}).replace(/<script.+?src=["']([^"']+?)["'](.*?)>\s*<\/script>/g, function(matchedWord, src, attrs){
+		}).replace(/<script.+?src=["']\/?([^"']+?)["'](.*?)>\s*<\/script>/g, function(matchedWord, src, attrs){
 			var ret = matchedWord, dataAttribs = getDataAttribs(attrs);
 
 			if(!isRemotePath(src) && src.indexOf(options.tag)!=-1){
@@ -146,7 +146,7 @@ module.exports = function(grunt) {
 			
 			return ret;
 
-		}).replace(/<link.+?href=["']([^"']+?)["'].*?\/?>/g, function(matchedWord, src){
+		}).replace(/<link.+?href=["']\/?([^"']+?)["'].*?\/?>/g, function(matchedWord, src){
 			var ret = matchedWord;
 			
 			if(!isRemotePath(src) && src.indexOf(options.tag)!=-1){
