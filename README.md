@@ -41,7 +41,8 @@ In your project's Gruntfile, add a section named `inline` to the data object pas
 	grunt.initConfig({
 	  inline: {
 	    dist: {
-	      src: [ 'dist/index.html' ]
+	      src: 'src/index.html',
+	      dest: 'dist/index.html'
 	    }
 	  }
 	})
@@ -49,14 +50,14 @@ In your project's Gruntfile, add a section named `inline` to the data object pas
 
 #### dest
 If dest is assigned, the the source file will be copied to the destination path. eg:
-`dist/index.html` will be processed and then copied to `dest/index.html`
+`src/index.html` will be processed and then copied to `dist/index.html`
 
 ```
 grunt.initConfig({
 	inline: {
 		dist: {
-			src: ['dist/index.html'],
-			dest: ['dest/']
+			src: 'src/index.html',
+			dest: 'dist/index.html'
 		}
 	}
 });
@@ -72,8 +73,8 @@ grunt.initConfig({
 			options:{
 				cssmin: true
 			},
-			src: ['dist/index.html'],
-			dest: ['dest/']
+			src: 'src/index.html',
+			dest: 'dist/index.html'
 		}
 	}
 });
@@ -90,8 +91,8 @@ grunt.initConfig({
 			options:{
 				tag: ''
 			},
-			src: ['dist/index.html'],
-			dest: ['dest/']
+			src: 'src/index.html',
+			dest: 'dist/index.html']
 		}
 	}
 });
@@ -110,8 +111,8 @@ grunt.initConfig({
 					js: 'data-inlined="true"',	// Adds ```<script data-inlined="true">...</script>```
 					css: 'data-inlined="true"'	// Adds ```<style data-inlined="true">...</style>```
 			},
-			src: ['dist/index.html'],
-			dest: ['dest/']
+			src: 'src/index.html',
+			dest: 'dist/index.html'
 		}
 	}
 });
@@ -128,8 +129,8 @@ grunt.initConfig({
 			options:{
 				uglify: true
 			},
-			src: ['dist/index.html'],
-			dest: ['dest/']
+			src: 'src/index.html',
+			dest: 'dist/index.html'
 		}
 	}
 });
@@ -144,10 +145,11 @@ grunt.initConfig({
 	inline: {
 		dist: {
 			options:{
+			    exts: ['jade'],
 				uglify: true
 			},
-			src: ['dist/index.html'],
-			dest: ['dest/']
+			src: 'src/index.jade',
+			dest: 'dist/index.jade'
 		}
 	}
 });
@@ -160,7 +162,7 @@ grunt.initConfig({
 	grunt.initConfig({
 	  inline: {
 	    dist: {
-	      src: [ 'dist/index.jade' ]
+	      src: 'src/index.html'
 	    }
 	  }
 	})
