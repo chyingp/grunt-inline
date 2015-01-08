@@ -231,7 +231,7 @@ Then, after the `inline` task is run, the original content in `index.html` will 
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
-* 2015-01-09 v0.3.3 bug fix: when processing files of a folder and then copy the processed content to another destination, the original files are changed unexpectedly, as mentioned in this issue[Support file globbing for input and output](https://github.com/chyingp/grunt-inline/issues/35)
+* 2015-01-09 v0.3.3 bug fix: when processing files of a folder and then copy the processed content to another destination, the original files are changed unexpectedly, as mentioned in this issue [Support file globbing for input and output](https://github.com/chyingp/grunt-inline/issues/35)
 * 2014-06-16 v0.3.1 bug fix: protocol-relative urls in css are messed up
 * 2014-06-15 v0.3.1 bug fix: when options.tag is '', then all img tags, whose src attribute has already been inlined will be matched.
 * 2014-05-19 v0.3.0 support for new options.exts
