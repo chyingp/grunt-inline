@@ -2,7 +2,7 @@
  * grunt-inline
  * https://github.com/chyingp/grunt-inline
  *
- * Copyright (c) 2014 Auguest G. casper & IMWEB TEAM
+ * Copyright (c) 2015 Auguest G. casper & IMWEB TEAM
  */
 
 'use strict';
@@ -15,29 +15,42 @@ module.exports = function(grunt) {
 	var CleanCSS = require('clean-css');
 	
 	grunt.registerMultiTask('inline', "Replaces <link>, <script> and <img> tags to their inline contents", function() {
+
 		var options = this.options({tag: '__inline'}),
 			uglify = !!options.uglify,
 			cssmin = !!options.cssmin,
 		    relativeTo = this.options().relativeTo,
 		    exts = options.exts,
-			dest = this.data.dest;
+			dest = this.data.dest,
+			isExpandedPair;
 
 		this.files.forEach(function(filePair){
-			var filepath = filePair.src[0];
-			var fileType = path.extname(filepath).replace(/^\./, '');
-			var fileContent = grunt.file.read(filepath);
+			
+			isExpandedPair = filePair.orig.expand || false;
 
-			grunt.log.write('Processing ' + filepath + '...')
+			filePair.src.forEach(function(filepath){
+				
+				var fileType = path.extname(filepath).replace(/^\./, '');
+				var fileContent = grunt.file.read(filepath);
+				var destFilepath = '';
 
-			if(fileType==='html' || (exts && exts.indexOf(fileType) > -1)){
-				fileContent = html(filepath, fileContent, relativeTo, options);
-			}else if(fileType==='css'){
-				fileContent = css(filepath, fileContent, relativeTo, options);
-			}
+				grunt.log.write('Processing ' + filepath + '...')
 
-			var destFile = filePair.orig.dest ? filePair.dest : filepath;
-			grunt.file.write(destFile,fileContent);
-			grunt.log.ok()
+				if(fileType==='html' || (exts && exts.indexOf(fileType) > -1)){
+					fileContent = html(filepath, fileContent, relativeTo, options);
+				}else if(fileType==='css'){
+					fileContent = css(filepath, fileContent, relativeTo, options);
+				}
+
+				if(detectDestType(filePair.dest) === 'directory') {
+					destFilepath = (isExpandedPair) ? filePair.dest : unixifyPath(path.join(filePair.dest, filepath));
+				}else{
+					destFilepath = filePair.dest || filepath;
+				}
+				
+				grunt.file.write(destFilepath, fileContent);
+				grunt.log.ok()
+			});
 		});
 	});
 
@@ -47,6 +60,23 @@ module.exports = function(grunt) {
 
 	function isBase64Path( url ){
 		return url.match(/^'?data.*base64/);
+	}
+
+	// code from grunt-contrib-copy, with a little modification
+	function detectDestType(dest) {
+		if (grunt.util._.endsWith(dest, '/')) {
+			return 'directory';
+		} else {
+			return 'file';
+		}
+	}	
+
+	function unixifyPath(filepath) {
+		if (process.platform === 'win32') {
+			return filepath.replace(/\\/g, '/');
+		} else {
+			return filepath;
+		}
 	}
 
 	// from grunt-text-replace.js in grunt-text-replace
