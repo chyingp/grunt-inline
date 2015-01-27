@@ -13,23 +13,25 @@ module.exports = function(grunt) {
 	var datauri = require('datauri');
 	var UglifyJS = require("uglify-js");
 	var CleanCSS = require('clean-css');
-	
+  var ngAnnotate = require("ng-annotate");
+
 	grunt.registerMultiTask('inline', "Replaces <link>, <script> and <img> tags to their inline contents", function() {
 
 		var options = this.options({tag: '__inline'}),
 			uglify = !!options.uglify,
 			cssmin = !!options.cssmin,
+      annotate = options.annotate,
 		    relativeTo = this.options().relativeTo,
 		    exts = options.exts,
 			dest = this.data.dest,
 			isExpandedPair;
 
 		this.files.forEach(function(filePair){
-			
+
 			isExpandedPair = filePair.orig.expand || false;
 
 			filePair.src.forEach(function(filepath){
-				
+
 				var fileType = path.extname(filepath).replace(/^\./, '');
 				var fileContent = grunt.file.read(filepath);
 				var destFilepath = '';
@@ -47,7 +49,7 @@ module.exports = function(grunt) {
 				}else{
 					destFilepath = filePair.dest || filepath;
 				}
-				
+
 				grunt.file.write(destFilepath, fileContent);
 				grunt.log.ok()
 			});
@@ -69,7 +71,7 @@ module.exports = function(grunt) {
 		} else {
 			return 'file';
 		}
-	}	
+	}
 
 	function unixifyPath(filepath) {
 		if (process.platform === 'win32') {
@@ -115,7 +117,7 @@ module.exports = function(grunt) {
 								_ret =arguments[1] +  _more + arguments[2] + arguments[3];
 								grunt.log.writeln('inline >含有相对目录进行替换操作,替换之后的路径：' + _ret );
 							}
-							return _ret;	
+							return _ret;
 						}
 						ret = ret.replace(/(<script.+?src=["'])([^"']+?)(["'].*?><\/script>)/g,_addMore);
 					}
@@ -130,23 +132,33 @@ module.exports = function(grunt) {
 
 			if(!isRemotePath(src) && src.indexOf(options.tag)!=-1){
 				var inlineFilePath = path.resolve( path.dirname(filepath), src ).replace(/\?.*$/, '');	// 将参数去掉
-				var c = options.uglify ? UglifyJS.minify(inlineFilePath).code : grunt.file.read( inlineFilePath );
-				if( grunt.file.exists(inlineFilePath) ){
-					ret = '<script>\n' + c + '\n</script>';
-				}else{
-					grunt.log.error("Couldn't find " + inlineFilePath + '!');
-				}
-			}					
+
+				if( !grunt.file.exists(inlineFilePath) ){
+          grunt.log.error("Couldn't find " + inlineFilePath + '!');
+        } else {
+          var c = grunt.file.read( inlineFilePath );
+
+          if (options.annotate) {
+            c = ngAnnotate(c, {add: true}).src;
+          }
+
+          if (options.uglify) {
+            c = UglifyJS.minify(c, {fromString: true}).code;
+          }
+
+  				ret = '<script>\n' + c + '\n</script>';
+        }
+			}
 			grunt.log.debug('ret = : ' + ret +'\n');
-			
+
 			return ret;
 
 		}).replace(/<link.+?href=["']([^"']+?)["'].*?\/?>/g, function(matchedWord, src){
 			var ret = matchedWord;
-			
+
 			if(!isRemotePath(src) && src.indexOf(options.tag)!=-1){
 
-				var inlineFilePath = path.resolve( path.dirname(filepath), src ).replace(/\?.*$/, '');	// 将参数去掉	
+				var inlineFilePath = path.resolve( path.dirname(filepath), src ).replace(/\?.*$/, '');	// 将参数去掉
 
 				if( grunt.file.exists(inlineFilePath) ){
 					var styleSheetContent = grunt.file.read( inlineFilePath );
@@ -156,24 +168,24 @@ module.exports = function(grunt) {
 				}
 			}
 			grunt.log.debug('ret = : ' + ret +'\n');
-			
-			return ret;	
+
+			return ret;
 		}).replace(/<img.+?src=["']([^"':]+?)["'].*?\/?\s*?>/g, function(matchedWord, src){
 			var	ret = matchedWord;
-			
+
 			if(!grunt.file.isPathAbsolute(src) && src.indexOf(options.tag)!=-1){
 
-				var inlineFilePath = path.resolve( path.dirname(filepath), src ).replace(/\?.*$/, '');	// 将参数去掉	
+				var inlineFilePath = path.resolve( path.dirname(filepath), src ).replace(/\?.*$/, '');	// 将参数去掉
 
 				if( grunt.file.exists(inlineFilePath) ){
 					ret = matchedWord.replace(src, (new datauri(inlineFilePath)).content);
 				}else{
 					grunt.log.error("Couldn't find " + inlineFilePath + '!');
 				}
-			}					
+			}
 			grunt.log.debug('ret = : ' + ret +'\n');
-			
-			return ret;	
+
+			return ret;
 		});
 
 		return fileContent;

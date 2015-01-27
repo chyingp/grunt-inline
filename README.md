@@ -136,6 +136,23 @@ grunt.initConfig({
 });
 ```
 
+### annotate
+If annotate is assigned true, `.js` file will be annotated using [ngAnnotate](https://github.com/olov/ng-annotate) before inlined.
+
+```
+grunt.initConfig({
+  inline: {
+    dist: {
+      options:{
+        annotate: true
+      },
+      src: 'src/index.html',
+      dest: 'dist/index.html'
+    }
+  }
+});
+```
+
 ### exts
 Setting an exts array allows multiple file extensions to be processed as
 html.
