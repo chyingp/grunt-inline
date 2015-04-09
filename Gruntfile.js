@@ -24,6 +24,7 @@ module.exports = function(grunt) {
 					'tmp/img.min.html': 'tmp/img.html',
 					'tmp/html.min.html': 'tmp/html.html',
 					'tmp/script.min.html': 'tmp/script.html',
+					'tmp/icon.min.html': 'tmp/icon.html',
 					'tmp/css_greedy.min.html': 'tmp/css_greedy.html',
 					'tmp/img_greedy.min.html': 'tmp/img_greedy.html',
 					'tmp/html_greedy.min.html': 'tmp/html_greedy.html',

@@ -22,7 +22,7 @@ function assertFileEquality(test, pathToActual, pathToExpected, message) {
 exports.inline = function(test) {
     'use strict';
 
-    test.expect(4);
+    test.expect(5);
 
     assertFileEquality(test,
       'tmp/css.min.html',
@@ -43,6 +43,11 @@ exports.inline = function(test) {
       'tmp/script.min.html',
       'test/expected/script.min.html',
       'Should compile script inline');
+
+    assertFileEquality(test,
+        'tmp/icon.min.html',
+        'test/expected/icon.min.html',
+        'Should not inline non-stylesheet links');
 
     test.done();
 };
