@@ -34,7 +34,7 @@ module.exports = function(grunt) {
 				var fileContent = grunt.file.read(filepath);
 				var destFilepath = '';
 
-				grunt.log.write('Processing ' + filepath + '...')
+				grunt.log.write('Processing ' + filepath + '... ');
 
 				if(fileType==='html' || (exts && exts.indexOf(fileType) > -1)){
 					fileContent = html(filepath, fileContent, relativeTo, options);
@@ -43,16 +43,20 @@ module.exports = function(grunt) {
 				}
 
 				if(detectDestType(filePair.dest) === 'directory') {
-					destFilepath = (isExpandedPair) ? filePair.dest : unixifyPath(path.join(filePair.dest, filepath));
+                    destFilepath = (isExpandedPair) ? filePair.dest : unixifyPath(path.join(filePair.dest, fileName(filepath)));
 				}else{
 					destFilepath = filePair.dest || filepath;
 				}
 				
 				grunt.file.write(destFilepath, fileContent);
-				grunt.log.ok()
+				grunt.log.ok();
 			});
 		});
 	});
+
+    function fileName(filePath) {
+        return filePath.replace(/^.*[\\\/]/, '');
+    }
 
 	function isRemotePath( url ){
 		return url.match(/^'?https?:\/\//) || url.match(/^\/\//);
@@ -69,7 +73,7 @@ module.exports = function(grunt) {
 		} else {
 			return 'file';
 		}
-	}	
+	}
 
 	function unixifyPath(filepath) {
 		if (process.platform === 'win32') {
@@ -84,11 +88,13 @@ module.exports = function(grunt) {
 		var isDestinationDirectory = (/\/$/).test(pathToDestinationFile);
 		var fileName = path.basename(pathToSource);
 		var newPathToDestination;
+
 		if (typeof pathToDestinationFile === 'undefined') {
 			newPathToDestination = pathToSource;
 		} else {
 			newPathToDestination = pathToDestinationFile + (isDestinationDirectory ? fileName : '');
 		}
+
 		return newPathToDestination;
 	}
 
