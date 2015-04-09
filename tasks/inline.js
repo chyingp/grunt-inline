@@ -16,7 +16,13 @@ module.exports = function(grunt) {
 	
 	grunt.registerMultiTask('inline', "Replaces <link>, <script> and <img> tags to their inline contents", function() {
 
-		var options = this.options({tag: '__inline'}),
+		var options = this.options({
+                tag: '__inline',
+                inlineTagAttributes: {
+                    js: '',
+                    css: ''
+                }
+            }),
 		    relativeTo = this.options().relativeTo,
 		    exts = options.exts,
 			isExpandedPair;
@@ -141,7 +147,7 @@ module.exports = function(grunt) {
                 if (grunt.file.exists(inlineFilePath)) {
                     var styleSheetContent = grunt.file.read(inlineFilePath);
 
-                    return '<style>\n' + cssInlineToHtml(filepath, inlineFilePath, styleSheetContent, relativeTo, options) + '\n</style>';
+                    return '<style ' + options.inlineTagAttributes.css + '>\n' + cssInlineToHtml(filepath, inlineFilePath, styleSheetContent, relativeTo, options) + '\n</style>';
                 } else {
                     grunt.log.error("Couldn't find " + inlineFilePath + '!');
                 }
