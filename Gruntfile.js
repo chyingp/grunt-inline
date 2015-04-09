@@ -4,13 +4,13 @@ module.exports = function(grunt) {
 	grunt.initConfig({
 		inline: {
 			dist: {
-				src: ['test/dist/*.html'],
-				dest: ['tmp/']
+				src: 'test/dist/*.html',
+				dest: 'tmp/'
 			}
 		},
 
 		clean: {
-			tests: ['tmp/']
+			tests: 'tmp/'
 		},
 
 		htmlmin: {
