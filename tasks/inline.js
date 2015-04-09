@@ -79,6 +79,11 @@ module.exports = function(grunt) {
 		}
 	}
 
+    function getDataAttribs(attrs) {
+        var reg = /(data-[\a-z-]+="[\w-]+")/gm;
+        return attrs.match(reg) || [];
+    }
+
 	function html(filepath, fileContent, relativeTo, options){
 	    if(relativeTo){
 	        filepath = filepath.replace(/[^\/]+\//, relativeTo);
@@ -113,36 +118,38 @@ module.exports = function(grunt) {
 			}
 
 			return matchedWord;
-		}).replace(/<script.+?src=["']([^"']+?)["'].*?>\s*<\/script>/g, function(matchedWord, src){
+		}).replace(/<script.+?src=["']\/?([^"']+?)["'](.*?)>\s*<\/script>/g, function(matchedWord, src, attrs){
+			var dataAttribs = getDataAttribs(attrs);
+
 			if(!isRemotePath(src) && src.indexOf(options.tag)!=-1){
-				var inlineFilePath = path.resolve( path.dirname(filepath), src ).replace(/\?.*$/, '');	// 将参数去掉
+				var inlineFilePath = path.resolve( path.dirname(filepath), src ).replace(/\?.*$/, '');
 				var c = options.uglify ? UglifyJS.minify(inlineFilePath).code : grunt.file.read( inlineFilePath );
-				if( grunt.file.exists(inlineFilePath) ){
-					return '<script>\n' + c + '\n</script>';
-				}
 
-                grunt.log.error("Couldn't find " + inlineFilePath + '!');
+				if( grunt.file.exists(inlineFilePath) ){
+					var inlineTagAttributes = options.inlineTagAttributes.js;
+					return '<script ' + inlineTagAttributes + ' ' + dataAttribs.join(' ') +' >\n' + c + '\n</script>';
+				}else{
+					grunt.log.error("Couldn't find " + inlineFilePath + '!');
+				}
 			}
 			
 			return matchedWord;
-
-		}).replace(/<link.+?href=["']([^"']+?)["'].*?\/?>/g, function(matchedWord, src){
+		}).replace(/<link.+?href=["']\/?([^"']+?)["'].*?\/?>/g, function(matchedWord, src){
 			if(!isRemotePath(src) && src.indexOf(options.tag)!=-1) {
-				var inlineFilePath = path.resolve( path.dirname(filepath), src ).replace(/\?.*$/, '');	// 将参数去掉	
+                var inlineFilePath = path.resolve(path.dirname(filepath), src).replace(/\?.*$/, '');
 
-				if( grunt.file.exists(inlineFilePath) ){
-					var styleSheetContent = grunt.file.read( inlineFilePath );
+                if (grunt.file.exists(inlineFilePath)) {
+                    var styleSheetContent = grunt.file.read(inlineFilePath);
 
-					return '<style>\n' + cssInlineToHtml(filepath, inlineFilePath, styleSheetContent, relativeTo, options) + '\n</style>';
-				}
+                    return '<style>\n' + cssInlineToHtml(filepath, inlineFilePath, styleSheetContent, relativeTo, options) + '\n</style>';
+                } else {
+                    grunt.log.error("Couldn't find " + inlineFilePath + '!');
+                }
+            }
 
-				grunt.log.error("Couldn't find " + inlineFilePath + '!');
-			}
-			
 			return matchedWord;
-		}).replace(/<img.+?src=["']([^"':]+?)["'].*?\/?\s*?>/g, function(matchedWord, src){
-			if(!grunt.file.isPathAbsolute(src) && src.indexOf(options.tag)!=-1){
-
+		}).replace(/<img.+?src=["']\/?([^"':]+?)["'].*?\/?\s*?>/g, function(matchedWord, src) {
+			if(!grunt.file.isPathAbsolute(src) && src.indexOf(options.tag)!=-1) {
 				var inlineFilePath = path.resolve( path.dirname(filepath), src ).replace(/\?.*$/, '');	// 将参数去掉	
 
 				if( grunt.file.exists(inlineFilePath) ){
