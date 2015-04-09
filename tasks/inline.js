@@ -32,7 +32,7 @@ module.exports = function(grunt) {
 
 				grunt.log.write('Processing ' + filepath + '... ');
 
-				if(fileType==='html' || (exts && exts.indexOf(fileType) > -1)){
+				if(fileType==='html' || fileType==='htm' || (exts && exts.indexOf(fileType) > -1)){
 					fileContent = html(filepath, fileContent, relativeTo, options);
 				} else if(fileType==='css'){
 					fileContent = css(filepath, fileContent, relativeTo, options);
