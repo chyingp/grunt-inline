@@ -166,10 +166,18 @@ module.exports = function(grunt) {
 				var inlineFilePath = path.resolve( path.dirname(filepath), src ).replace(/\?.*$/, '');	// 将参数去掉	
 
 				if( grunt.file.exists(inlineFilePath) ){
-					ret = matchedWord.replace(src, (new datauri(inlineFilePath)).content);
+
+					if (getFileSize(inlineFilePath) <= options.maxSize){
+						ret = matchedWord.replace(src, (new datauri(inlineFilePath)).content);
+						grunt.log.writeln('Inlining Image: '+ inlineFilePath.cyan + ' -> file size:' + getFileSize(inlineFilePath));
+					}else{
+						grunt.log.error("Omiting inlining of "+ inlineFilePath.red +" -> Image larger than "+ options.maxSize +".");
+					}
+
 				}else{
 					grunt.log.error("Couldn't find " + inlineFilePath + '!');
 				}
+
 			}					
 			grunt.log.debug('ret = : ' + ret +'\n');
 			
@@ -243,5 +251,18 @@ module.exports = function(grunt) {
 		fileContent = options.cssmin ? CleanCSS.process(fileContent) : fileContent;
 
 		return fileContent;
+	}
+	
+	function getFileSize(fullPath) {
+
+		if (!fs.existsSync(fullPath)) {
+			return false;
+		}
+
+		var stats = fs.statSync(fullPath);
+		if (!stats.isFile()) {
+			return false;
+		}
+		return stats.size;
 	}
 };
