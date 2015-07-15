@@ -107,22 +107,37 @@ module.exports = function(grunt) {
 					ret = grunt.file.read( inlineFilePath );
 
 					// @otod need to be checked, add bye herbert
-					var _more = src.match(/^(..\/)+/ig);
-					if(_more = _more && _more[0]){
-						var _addMore = function(){
-							var	_ret = arguments[0],_src = arguments[2];
+					if(options.relativeHTMLPath || src.match(/^(..\/)+/ig)){
+						ret = ret.replace(/(<script.+?src=["'])([^"']+?)(["'].*?><\/script>)/g, function(){
+							var _src = arguments[2];
 							if(!_src.match(/^http\:\/\//)){
-								if(options.relativeHTMLPath){ // 转换相对路径--add by vienwu
-									_ret =arguments[1] +  path.join(src,'../',arguments[2]).replace(/\\/g,'/') + arguments[3];
-								}else{
-									_ret =arguments[1] +  _more + arguments[2] + arguments[3];
-								}
-								grunt.log.writeln('inline >含有相对目录进行替换操作,替换之后的路径：' + _ret );
+								// 转换相对路径--add by vienwu
+								var _path = path.join(src,'../',arguments[2]).replace(/\\/g,'/');
+								grunt.log.write('\n replace inline path '+ arguments[2] + ' >>> ' + _path);
+								return arguments[1] + _path  + arguments[3];
+							}else{
+								return arguments[1] +  arguments[2] + arguments[3];
 							}
-							return _ret;
-						}
-						ret = ret.replace(/(<script.+?src=["'])([^"']+?)(["'].*?><\/script>)/g,_addMore);
+						});
 					}
+
+					// var _more = src.match(/^(..\/)+/ig);
+					// if(_more = _more && _more[0]){
+						// var _addMore = function(){
+						// 	var	_ret = arguments[0],_src = arguments[2];
+						// 	if(!_src.match(/^http\:\/\//)){
+						// 		if(options.relativeHTMLPath){ // 转换相对路径--add by vienwu
+						// 			_ret =arguments[1] +  path.join(src,'../',arguments[2]).replace(/\\/g,'/') + arguments[3];
+						// 		}else{
+						// 			_ret =arguments[1] +  _more + arguments[2] + arguments[3];
+						// 		}
+						// 		grunt.log.writeln('inline >含有相对目录进行替换操作,替换之后的路径：' + _ret );
+						// 	}
+						// 	grunt.log.writeln(_ret,options.relativeHTMLPath,123);
+						// 	return _ret;
+						// }
+						// ret = ret.replace(/(<script.+?src=["'])([^"']+?)(["'].*?><\/script>)/g,_addMore);
+					// }
 				}else{
 					grunt.log.error("Couldn't find " + inlineFilePath + '!');
 				}
