@@ -146,7 +146,9 @@ module.exports = function(grunt) {
 			
 			if(!isRemotePath(src) && src.indexOf(options.tag)!=-1){
 
-				var inlineFilePath = path.resolve( path.dirname(filepath), src ).replace(/\?.*$/, '');	// 将参数去掉	
+				var dirName = path.dirname(filepath),
+						prefixedSrc = (options.srcPrefix || '') + src, 
+						inlineFilePath = path.resolve(dirName, prefixedSrc).replace(/\?.*$/, '');	// 将参数去掉	
 
 				if( grunt.file.exists(inlineFilePath) ){
 					var styleSheetContent = grunt.file.read( inlineFilePath );
