@@ -49,7 +49,7 @@ In your project's Gruntfile, add a section named `inline` to the data object pas
 ### Options
 
 #### dest
-If dest is assigned, the the source file will be copied to the destination path. eg:
+If dest is assigned, the source file will be copied to the destination path. eg:
 `src/index.html` will be processed and then copied to `dist/index.html`
 
 ```
