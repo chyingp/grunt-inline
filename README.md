@@ -13,8 +13,7 @@ is replaced with
 <style>
 /* contents of css/style.css */
 </style>
-```
-
+````
 Javascript references are brought inline, and images in the html
 and css blocks are converted to base-64 data: urls.
 
