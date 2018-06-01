@@ -5,11 +5,13 @@ a single file.
 
 For exmample:
 
-````
+```
 <link href="css/style.css?__inline=true" rel="stylesheet" />
-````
+```
+
 is replaced with
-````
+
+```
 <style>
 /* contents of css/style.css */
 </style>
@@ -23,6 +25,7 @@ behavior can be overrided via the `tag:` option.
 
 
 ## Getting Started
+
 This plugin requires Grunt `~0.4.1`
 
 If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins. Once you're familiar with that process, you may install this plugin with this command:
@@ -36,8 +39,10 @@ Once the plugin has been installed, it may be enabled inside your Gruntfile with
 ## The "grunt-inline" task
 
 ### Overview
+
 In your project's Gruntfile, add a section named `inline` to the data object passed into `grunt.initConfig()`.
 
+```
 	grunt.initConfig({
 	  inline: {
 	    dist: {
@@ -46,9 +51,12 @@ In your project's Gruntfile, add a section named `inline` to the data object pas
 	    }
 	  }
 	})
+```
+
 ### Options
 
 #### dest
+
 If dest is assigned, the the source file will be copied to the destination path. eg:
 `src/index.html` will be processed and then copied to `dist/index.html`
 
@@ -64,6 +72,7 @@ grunt.initConfig({
 ```
 
 ### cssmin
+
 If cssmin is assigned true, `.css` will be minified before inlined.
 
 ```
@@ -81,6 +90,7 @@ grunt.initConfig({
 ```
 
 ### tag (defaults to ```__inline```)
+
 Only URLs that contain the value for ```tag``` will be inlined.
 Specify ```tag: ''``` to include all urls.
 
@@ -100,6 +110,7 @@ grunt.initConfig({
 
 
 ### inlineTagAttributes
+
 Ability to add attributes string to inline tag.
 
 ```
@@ -118,8 +129,8 @@ grunt.initConfig({
 });
 ```
 
-
 ### uglify
+
 If uglify is assigned true, `.js` file will be minified before inlined.
 
 ```
@@ -159,6 +170,7 @@ grunt.initConfig({
 
 > config
 
+```
 	grunt.initConfig({
 	  inline: {
 	    dist: {
@@ -166,9 +178,11 @@ grunt.initConfig({
 	    }
 	  }
 	})
+```	
 
 > src/index.html
 
+```
 	<html>
 		<head>
 			<title>demo</title>
@@ -180,9 +194,11 @@ grunt.initConfig({
 			<script src="js/erport.js?__inline=true"></script>
 		</body>
 	</html>
+```	
 
-> after `grunt inline` was run, it will be something like
+after `grunt inline` was run, it will be something like
 
+```
 	<html>
 		<head>
 			<title>demo</title>
@@ -206,8 +222,10 @@ grunt.initConfig({
 			</script>
 		</body>
 	</html>
+```
 
 #### inline tag
+
 Suppose there is an `<inline>` tag in `index.html` like bellow
 
 ```
@@ -230,6 +248,7 @@ Then, after the `inline` task is run, the original content in `index.html` will 
 ```
 
 ## Contributing
+
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
