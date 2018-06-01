@@ -119,17 +119,17 @@ Ability to add attributes string to inline tag.
 
 ```javascript
 grunt.initConfig({
-	inline: {
-		dist: {
-			options:{
-				inlineTagAttributes: {
-					js: 'data-inlined="true"',	// Adds ```<script data-inlined="true">...</script>```
-					css: 'data-inlined="true"'	// Adds ```<style data-inlined="true">...</style>```
-			},
-			src: 'src/index.html',
-			dest: 'dist/index.html'
-		}
-	}
+  inline: {
+    dist: {
+      options:{
+        inlineTagAttributes: {
+          js: 'data-inlined="true"',	// Adds ```<script data-inlined="true">...</script>```
+          css: 'data-inlined="true"'	// Adds ```<style data-inlined="true">...</style>```
+        },
+        src: 'src/index.html',
+        dest: 'dist/index.html'
+     }
+  }
 });
 ```
 
@@ -139,15 +139,15 @@ If uglify is assigned true, `.js` file will be minified before inlined.
 
 ```javascript
 grunt.initConfig({
-	inline: {
-		dist: {
-			options:{
-				uglify: true
-			},
-			src: 'src/index.html',
-			dest: 'dist/index.html'
-		}
-	}
+  inline: {
+    dist: {
+      options:{
+        uglify: true
+      },
+      src: 'src/index.html',
+      dest: 'dist/index.html'
+    }
+  }
 });
 ```
 
@@ -158,16 +158,16 @@ html.
 
 ```javascript
 grunt.initConfig({
-	inline: {
-		dist: {
-			options:{
-			    exts: ['jade'],
-				uglify: true
-			},
-			src: 'src/index.jade',
-			dest: 'dist/index.jade'
-		}
-	}
+  inline: {
+    dist: {
+      options:{
+        exts: ['jade'],
+        uglify: true
+      },
+      src: 'src/index.jade',
+      dest: 'dist/index.jade'
+    }
+  }
 });
 ```
 
@@ -189,15 +189,15 @@ grunt.initConfig({
 
 ```html
 <html>
-	<head>
-		<title>demo</title>
-		<link href="css/style.css?__inline=true" rel="stylesheet" />
-	</head>
-	<body>
-		<img src="img/icon.png?__inline=true" />
-
-		<script src="js/erport.js?__inline=true"></script>
-	</body>
+<head>
+  <title>demo</title>
+  <link href="css/style.css?__inline=true" rel="stylesheet" />
+</head>
+<body>
+  <img src="img/icon.png?__inline=true" />
+    
+  <script src="js/erport.js?__inline=true"></script>
+</body>
 </html>
 ```	
 
@@ -205,27 +205,27 @@ after `grunt inline` was run, it will be something like
 
 ```html
 <html>
-	<head>
-		<title>demo</title>
-		<style>
-			.container{
-				padding: 0;
-			}
-		</style>
-	</head>
-	<body>
-		<! -- base64, a terrible mass you know…so just show a little bit ...-->
-		<img src="idata:image/png;base64data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEMAAAAYCAYAAAChg0BHAA..." />
+<head>
+  <title>demo</title>
+  <style>
+  .container{
+    padding: 0;
+    }
+  </style>
+</head>
+<body>
+  <! -- base64, a terrible mass you know…so just show a little bit ...--> 
+  <img src="idata:image/png;base64data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEMAAAAYCAYAAAChg0BHAA..." />
 
-		<script>
-			var Report = (function(){
-				return {
-					init: function(){
-					}
-				};
-			})();
-		</script>
-	</body>
+  <script>
+  var Report = (function(){ 
+    return {
+      init: function(){
+      }
+    };
+  })();
+</script>
+</body>
 </html>
 ```
 
