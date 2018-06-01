@@ -5,13 +5,13 @@ a single file.
 
 For exmample:
 
-```
+```html
 <link href="css/style.css?__inline=true" rel="stylesheet" />
 ```
 
 is replaced with
 
-```
+```html
 <style>
 /* contents of css/style.css */
 </style>
@@ -30,11 +30,15 @@ This plugin requires Grunt `~0.4.1`
 
 If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins. Once you're familiar with that process, you may install this plugin with this command:
 
-	npm install grunt-inline --save-dev
+```bash
+npm install grunt-inline --save-dev
+```	
 
 Once the plugin has been installed, it may be enabled inside your Gruntfile with this line of JavaScript:
 
-	grunt.loadNpmTasks('grunt-inline');
+```bash
+grunt.loadNpmTasks('grunt-inline');
+```
 
 ## The "grunt-inline" task
 
@@ -42,15 +46,15 @@ Once the plugin has been installed, it may be enabled inside your Gruntfile with
 
 In your project's Gruntfile, add a section named `inline` to the data object passed into `grunt.initConfig()`.
 
-```
-	grunt.initConfig({
-	  inline: {
-	    dist: {
-	      src: 'src/index.html',
-	      dest: 'dist/index.html'
-	    }
-	  }
-	})
+```javascript
+grunt.initConfig({
+  inline: {
+    dist: {
+      src: 'src/index.html',
+      dest: 'dist/index.html'
+    }
+  }
+})
 ```
 
 ### Options
@@ -60,7 +64,7 @@ In your project's Gruntfile, add a section named `inline` to the data object pas
 If dest is assigned, the the source file will be copied to the destination path. eg:
 `src/index.html` will be processed and then copied to `dist/index.html`
 
-```
+```javascript
 grunt.initConfig({
 	inline: {
 		dist: {
@@ -75,7 +79,7 @@ grunt.initConfig({
 
 If cssmin is assigned true, `.css` will be minified before inlined.
 
-```
+```javascript
 grunt.initConfig({
 	inline: {
 		dist: {
@@ -94,7 +98,7 @@ grunt.initConfig({
 Only URLs that contain the value for ```tag``` will be inlined.
 Specify ```tag: ''``` to include all urls.
 
-```
+```javascript
 grunt.initConfig({
 	inline: {
 		dist: {
@@ -113,7 +117,7 @@ grunt.initConfig({
 
 Ability to add attributes string to inline tag.
 
-```
+```javascript
 grunt.initConfig({
 	inline: {
 		dist: {
@@ -133,7 +137,7 @@ grunt.initConfig({
 
 If uglify is assigned true, `.js` file will be minified before inlined.
 
-```
+```javascript
 grunt.initConfig({
 	inline: {
 		dist: {
@@ -148,10 +152,11 @@ grunt.initConfig({
 ```
 
 ### exts
+
 Setting an exts array allows multiple file extensions to be processed as
 html.
 
-```
+```javascript
 grunt.initConfig({
 	inline: {
 		dist: {
@@ -170,79 +175,79 @@ grunt.initConfig({
 
 > config
 
-```
-	grunt.initConfig({
-	  inline: {
-	    dist: {
-	      src: 'src/index.html'
-	    }
-	  }
-	})
+```javascript
+grunt.initConfig({
+  inline: {
+	dist: {
+	  src: 'src/index.html'
+	}
+  }
+})
 ```	
 
 > src/index.html
 
-```
-	<html>
-		<head>
-			<title>demo</title>
-			<link href="css/style.css?__inline=true" rel="stylesheet" />
-		</head>
-		<body>
-			<img src="img/icon.png?__inline=true" />
+```html
+<html>
+	<head>
+		<title>demo</title>
+		<link href="css/style.css?__inline=true" rel="stylesheet" />
+	</head>
+	<body>
+		<img src="img/icon.png?__inline=true" />
 
-			<script src="js/erport.js?__inline=true"></script>
-		</body>
-	</html>
+		<script src="js/erport.js?__inline=true"></script>
+	</body>
+</html>
 ```	
 
 after `grunt inline` was run, it will be something like
 
-```
-	<html>
-		<head>
-			<title>demo</title>
-			<style>
-				.container{
-					padding: 0;
-				}
-			</style>
-		</head>
-		<body>
-			<! -- base64, a terrible mass you know…so just show a little bit ...-->
-			<img src="idata:image/png;base64data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEMAAAAYCAYAAAChg0BHAA..." />
+```html
+<html>
+	<head>
+		<title>demo</title>
+		<style>
+			.container{
+				padding: 0;
+			}
+		</style>
+	</head>
+	<body>
+		<! -- base64, a terrible mass you know…so just show a little bit ...-->
+		<img src="idata:image/png;base64data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEMAAAAYCAYAAAChg0BHAA..." />
 
-			<script>
-				var Report = (function(){
-					return {
-						init: function(){
-						}
-					};
-				})();
-			</script>
-		</body>
-	</html>
+		<script>
+			var Report = (function(){
+				return {
+					init: function(){
+					}
+				};
+			})();
+		</script>
+	</body>
+</html>
 ```
 
 #### inline tag
 
 Suppose there is an `<inline>` tag in `index.html` like bellow
 
-```
+```html
 <!-- inline tag -->
 <inline src="test.html" />
 ```
 
 The content of `test.html` is
 
-```
+```html
 <p>I'm inline html</p>
 <span>hello world!</span>
 ```
 
 Then, after the `inline` task is run, the original content in `index.html` will be replaced with
 
-```
+```html
 <p>I'm inline html</p>
 <span>hello world!</span>
 ```
