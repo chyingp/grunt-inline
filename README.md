@@ -66,12 +66,12 @@ If dest is assigned, the the source file will be copied to the destination path.
 
 ```javascript
 grunt.initConfig({
-	inline: {
-		dist: {
-			src: 'src/index.html',
-			dest: 'dist/index.html'
-		}
-	} 
+  inline: {
+    dist: {
+      src: 'src/index.html',
+      dest: 'dist/index.html'
+    }
+  } 
 });
 ```
 
@@ -81,15 +81,15 @@ If cssmin is assigned true, `.css` will be minified before inlined.
 
 ```javascript
 grunt.initConfig({
-	inline: {
-		dist: {
-			options:{
-				cssmin: true
-			},
-			src: 'src/index.html',
-			dest: 'dist/index.html'
-		}
-	}
+  inline: {
+    dist: {
+      options:{
+        cssmin: true
+      },
+      src: 'src/index.html',
+      dest: 'dist/index.html'
+    }
+  }
 });
 ```
 
@@ -100,15 +100,15 @@ Specify ```tag: ''``` to include all urls.
 
 ```javascript
 grunt.initConfig({
-	inline: {
-		dist: {
-			options:{
-				tag: ''
-			},
-			src: 'src/index.html',
-			dest: 'dist/index.html']
-		}
-	}
+  inline: {
+    dist: {
+      options:{
+        tag: ''
+      },
+      src: 'src/index.html',
+      dest: 'dist/index.html']
+    }
+  }
 });
 ```
 
