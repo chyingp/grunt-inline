@@ -71,7 +71,7 @@ grunt.initConfig({
 			src: 'src/index.html',
 			dest: 'dist/index.html'
 		}
-	}
+	} 
 });
 ```
 
