@@ -1,4 +1,4 @@
-# grunt-inline[![build status](https://secure.travis-ci.org/miniflycn/grunt-inline.png)](http://travis-ci.org/miniflycn/grunt-inline)
+# grunt-inline[![build status](https://secure.travis-ci.org/marcusklaas/grunt-inline.png)](http://travis-ci.org/marcusklaas/grunt-inline)
 
 Brings externally referenced resources, such as js, css and images, into
 a single file.
@@ -257,6 +257,8 @@ Then, after the `inline` task is run, the original content in `index.html` will 
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
+* 2015-03-03 v0.3.5 add feature: support for inlining favicons
+* 2015-03-09 v0.3.4 fork: fork project, fix tests and merge a number of pull requests
 * 2015-01-09 v0.3.3 bug fix: when processing files of a folder and then copy the processed content to another destination, the original files are changed unexpectedly, as mentioned in this issue [Support file globbing for input and output](https://github.com/chyingp/grunt-inline/issues/35)
 * 2014-06-16 v0.3.1 bug fix: protocol-relative urls in css are messed up
 * 2014-06-15 v0.3.1 bug fix: when options.tag is '', then all img tags, whose src attribute has already been inlined will be matched.
