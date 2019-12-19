@@ -17,7 +17,7 @@ is replaced with
 </style>
 ```
 
-Javascript references are brought inline, and images in the html
+JavaScript references are brought inline, and images in the html
 and css blocks are converted to base-64 data: urls.
 
 By default, only urls marked with `__inline` are converted, however this
@@ -32,7 +32,7 @@ If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out th
 
 ```bash
 npm install grunt-inline --save-dev
-```	
+```
 
 Once the plugin has been installed, it may be enabled inside your Gruntfile with this line of JavaScript:
 
@@ -54,7 +54,7 @@ grunt.initConfig({
       dest: 'dist/index.html'
     }
   }
-})
+});
 ```
 
 ### Options
@@ -123,12 +123,13 @@ grunt.initConfig({
     dist: {
       options:{
         inlineTagAttributes: {
-          js: 'data-inlined="true"',	// Adds ```<script data-inlined="true">...</script>```
-          css: 'data-inlined="true"'	// Adds ```<style data-inlined="true">...</style>```
+          js: 'data-inlined="true"',  // Adds <script data-inlined="true">...</script>
+          css: 'data-inlined="true"'  // Adds <style data-inlined="true">...</style>
         },
         src: 'src/index.html',
         dest: 'dist/index.html'
      }
+    }
   }
 });
 ```
@@ -178,14 +179,14 @@ grunt.initConfig({
 ```javascript
 grunt.initConfig({
   inline: {
-	dist: {
-	  src: 'src/index.html'
-	}
+  	dist: {
+  	  src: 'src/index.html'
+  	}
   }
-})
-```	
+});
+```
 
-> src/index.html
+>src/index.html
 
 ```html
 <html>
@@ -195,11 +196,11 @@ grunt.initConfig({
 </head>
 <body>
   <img src="img/icon.png?__inline=true" />
-    
+
   <script src="js/erport.js?__inline=true"></script>
 </body>
 </html>
-```	
+```
 
 after `grunt inline` was run, it will be something like
 
@@ -257,6 +258,7 @@ Then, after the `inline` task is run, the original content in `index.html` will 
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
+* 2019-12-20 v0.3.7 document optimized: markdown style problems of README
 * 2015-01-09 v0.3.3 bug fix: when processing files of a folder and then copy the processed content to another destination, the original files are changed unexpectedly, as mentioned in this issue [Support file globbing for input and output](https://github.com/chyingp/grunt-inline/issues/35)
 * 2014-06-16 v0.3.1 bug fix: protocol-relative urls in css are messed up
 * 2014-06-15 v0.3.1 bug fix: when options.tag is '', then all img tags, whose src attribute has already been inlined will be matched.
