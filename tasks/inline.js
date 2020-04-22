@@ -130,7 +130,13 @@ module.exports = function(grunt) {
 
 			if(!isRemotePath(src) && src.indexOf(options.tag)!=-1){
 				var inlineFilePath = path.resolve( path.dirname(filepath), src ).replace(/\?.*$/, '');	// 将参数去掉
-				var c = options.uglify ? UglifyJS.minify(inlineFilePath).code : grunt.file.read( inlineFilePath );
+
+				try {
+					var c = options.uglify ? UglifyJS.minify(inlineFilePath).code : grunt.file.read( inlineFilePath );
+				} catch (err) {
+					grunt.fail.warn(err);
+				}
+				
 				if( grunt.file.exists(inlineFilePath) ){
 					ret = '<script>\n' + c + '\n</script>';
 				}else{
@@ -206,7 +212,12 @@ module.exports = function(grunt) {
 
 			return matchedWord.replace(imgUrl, newUrl);
 		});
-		fileContent = options.cssmin ? CleanCSS.process(fileContent) : fileContent;
+
+		try {
+			fileContent = options.cssmin ? CleanCSS.process(fileContent) : fileContent;
+		} catch(err) {
+			grunt.fail.warn(err);
+		}
 
 		return fileContent;
 	}
