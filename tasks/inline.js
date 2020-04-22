@@ -61,6 +61,10 @@ module.exports = function(grunt) {
 	function isBase64Path( url ){
 		return url.match(/^'?data.*base64/);
 	}
+	
+	function isInlineSVG( url ){
+	        return url.match(/^'?data.*svg\+xml/);
+	}
 
 	// code from grunt-contrib-copy, with a little modification
 	function detectDestType(dest) {
@@ -187,7 +191,7 @@ module.exports = function(grunt) {
 		fileContent = fileContent.replace(/url\(["']*([^)'"]+)["']*\)/g, function(matchedWord, imgUrl){
 			var newUrl = imgUrl;
 			var flag = imgUrl.indexOf(options.tag)!=-1;	// urls like "img/bg.png?__inline" will be transformed to base64
-			if(isBase64Path(imgUrl) || isRemotePath(imgUrl)){
+			if(isBase64Path(imgUrl) || isInlineSVG(imgUrl) || isRemotePath(imgUrl)){
 				return matchedWord;
 			}
 			grunt.log.debug( 'imgUrl: '+imgUrl);
@@ -220,7 +224,7 @@ module.exports = function(grunt) {
 			var newUrl = imgUrl;
 			var flag = !!imgUrl.match(/\?__inline/);	// urls like "img/bg.png?__inline" will be transformed to base64
 			grunt.log.debug('flag:'+flag);
-			if(isBase64Path(imgUrl) || isRemotePath(imgUrl)){
+			if(isBase64Path(imgUrl) || isInlineSVG(imgUrl) || isRemotePath(imgUrl)){
 				return matchedWord;
 			}
 			grunt.log.debug( 'imgUrl: '+imgUrl);
